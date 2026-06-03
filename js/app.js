@@ -6,6 +6,7 @@ import { loadQuotes, getDailyQuote, renderQuote } from './quotes.js';
 import { initWeather, startWeatherRefresh } from './weather.js';
 import { renderCategories } from './links.js';
 import { initSettings } from './settings.js';
+import { renderHelp } from './help.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
 
@@ -94,11 +95,31 @@ document.addEventListener('DOMContentLoaded', async () => {
   const modalTitle = document.getElementById('modal-title');
   if (modalTitle) modalTitle.textContent = t(lang, 'settingsTitle');
 
-  // ── 11. Edit mode toggle ───────────────────────────────────────────────
+  // ── 11. Edit mode toggle ──────────────────────────────────────────────
   const editBtn = document.getElementById('edit-mode-btn');
   editBtn?.addEventListener('click', () => {
     const active = document.body.classList.toggle('edit-mode');
     editBtn.classList.toggle('active', active);
+  });
+
+  // ── 12. Help modal ────────────────────────────────────────────────────
+  const helpOverlay = document.getElementById('help-modal');
+  renderHelp(lang);
+
+  document.getElementById('help-btn')?.addEventListener('click', () => {
+    helpOverlay?.classList.add('open');
+  });
+
+  document.getElementById('help-close-btn')?.addEventListener('click', () => {
+    helpOverlay?.classList.remove('open');
+  });
+
+  helpOverlay?.addEventListener('click', e => {
+    if (e.target === helpOverlay) helpOverlay.classList.remove('open');
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') helpOverlay?.classList.remove('open');
   });
 });
 
