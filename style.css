@@ -804,6 +804,30 @@ input, select { font: inherit; }
 }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
 
+/* ── Drag & Drop ─────────────────────────────────────────────── */
+.cat-label { cursor: grab; }
+
+.category.dragging   { opacity: 0.35; }
+.link-card.dragging  { opacity: 0.35; }
+
+.category.drag-over-cat {
+  outline: 2px dashed var(--accent);
+  outline-offset: 6px;
+  border-radius: var(--radius-card);
+}
+
+.link-card.drag-over {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.links-row.drag-over-row {
+  outline: 2px dashed var(--accent);
+  outline-offset: 4px;
+  border-radius: var(--radius-sm);
+  min-height: 52px;
+}
+
 /* ── Edit / Cancel Buttons ───────────────────────────────────── */
 .edit-btn {
   padding: 3px 8px;

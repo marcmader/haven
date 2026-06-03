@@ -1,3 +1,4 @@
+import { loadLinks, saveLinks } from './storage.js';
 
 function _accentHex() {
   return getComputedStyle(document.documentElement)
@@ -7,6 +8,9 @@ function _accentHex() {
 function _domainToSlug(hostname) {
   return hostname.replace(/^www\./, '').split('.')[0].toLowerCase();
 }
+
+// Active drag payload — shared across all drag handlers
+let _drag = null;
 
 /**
  * Create a favicon element using Simple Icons CDN, falling back to a letter avatar.
@@ -52,16 +56,19 @@ function createAvatarEl(name) {
 
 /**
  * Create a single link card <a> element.
- * @param {{ id: string, url: string, name: string, description: string }} link
+ * @param {{ id, url, name, description, iconSlug }} link
  * @param {{ linkTarget: string }} settings
+ * @param {string} catId
+ * @param {Function} rerender
  * @returns {HTMLAnchorElement}
  */
-export function renderLinkCard(link, settings) {
+export function renderLinkCard(link, settings, catId, rerender) {
   const a = document.createElement('a');
   a.className = 'link-card';
   a.href = link.url;
   a.target = settings.linkTarget || '_blank';
   if (settings.linkTarget === '_blank') a.rel = 'noopener noreferrer';
+  a.draggable = true;
 
   const favicon = createFaviconEl(link.url, link.name, link.iconSlug);
   const info = document.createElement('div');
@@ -81,23 +88,74 @@ export function renderLinkCard(link, settings) {
 
   a.appendChild(favicon);
   a.appendChild(info);
+
+  // ── Link drag events ────────────────────────────────────────────────────
+  a.addEventListener('dragstart', e => {
+    e.stopPropagation();
+    _drag = { type: 'link', linkId: link.id, catId };
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', 'link');
+    requestAnimationFrame(() => a.classList.add('dragging'));
+  });
+
+  a.addEventListener('dragend', () => {
+    a.classList.remove('dragging', 'drag-over');
+    _drag = null;
+  });
+
+  a.addEventListener('dragover', e => {
+    if (_drag?.type !== 'link' || _drag.linkId === link.id) return;
+    e.preventDefault();
+    e.stopPropagation();
+    a.classList.add('drag-over');
+  });
+
+  a.addEventListener('dragleave', e => {
+    if (!a.contains(e.relatedTarget)) a.classList.remove('drag-over');
+  });
+
+  a.addEventListener('drop', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    a.classList.remove('drag-over');
+    if (!_drag || _drag.type !== 'link' || _drag.linkId === link.id) return;
+
+    const data = loadLinks();
+    const srcCat = data.categories.find(c => c.id === _drag.catId);
+    const tgtCat = data.categories.find(c => c.id === catId);
+    if (!srcCat || !tgtCat) return;
+
+    const movedLink = srcCat.links.find(l => l.id === _drag.linkId);
+    if (!movedLink) return;
+
+    srcCat.links = srcCat.links.filter(l => l.id !== _drag.linkId);
+    const tgtIdx = tgtCat.links.findIndex(l => l.id === link.id);
+    tgtCat.links.splice(tgtIdx, 0, movedLink);
+
+    saveLinks(data);
+    rerender();
+  });
+
   return a;
 }
 
 /**
  * Render all categories and their link cards into the container.
- * Clears existing category sections first (leaves hero-card intact).
- * @param {{ categories: Array }} data — from storage.loadLinks()
+ * Supports drag & drop reordering of both categories and link cards.
+ * @param {{ categories: Array }} data
  * @param {{ linkTarget: string }} settings
- * @param {HTMLElement} container — the .content element
+ * @param {HTMLElement} container
  */
 export function renderCategories(data, settings, container) {
   container.querySelectorAll('.category').forEach(el => el.remove());
+
+  const rerender = () => renderCategories(loadLinks(), settings, container);
 
   for (const cat of data.categories) {
     const section = document.createElement('div');
     section.className = 'category';
     section.dataset.catId = cat.id;
+    section.draggable = true;
 
     const label = document.createElement('div');
     label.className = 'cat-label';
@@ -107,9 +165,86 @@ export function renderCategories(data, settings, container) {
     const row = document.createElement('div');
     row.className = 'links-row';
     for (const link of cat.links) {
-      row.appendChild(renderLinkCard(link, settings));
+      row.appendChild(renderLinkCard(link, settings, cat.id, rerender));
     }
     section.appendChild(row);
     container.appendChild(section);
+
+    // ── Category drag events ──────────────────────────────────────────────
+    section.addEventListener('dragstart', e => {
+      if (_drag?.type === 'link') return; // link drag takes priority
+      _drag = { type: 'cat', catId: cat.id };
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', 'cat');
+      requestAnimationFrame(() => section.classList.add('dragging'));
+    });
+
+    section.addEventListener('dragend', () => {
+      section.classList.remove('dragging', 'drag-over-cat');
+      _drag = null;
+    });
+
+    section.addEventListener('dragover', e => {
+      if (_drag?.type !== 'cat' || _drag.catId === cat.id) return;
+      e.preventDefault();
+      section.classList.add('drag-over-cat');
+    });
+
+    section.addEventListener('dragleave', e => {
+      if (!section.contains(e.relatedTarget)) section.classList.remove('drag-over-cat');
+    });
+
+    section.addEventListener('drop', e => {
+      e.preventDefault();
+      section.classList.remove('drag-over-cat');
+      if (!_drag || _drag.type !== 'cat' || _drag.catId === cat.id) return;
+
+      const freshData = loadLinks();
+      const fromIdx = freshData.categories.findIndex(c => c.id === _drag.catId);
+      const toIdx   = freshData.categories.findIndex(c => c.id === cat.id);
+      if (fromIdx === -1 || toIdx === -1) return;
+
+      const [moved] = freshData.categories.splice(fromIdx, 1);
+      freshData.categories.splice(toIdx, 0, moved);
+
+      saveLinks(freshData);
+      rerender();
+    });
+
+    // Drop into empty category row (no link cards yet)
+    row.addEventListener('dragover', e => {
+      if (_drag?.type !== 'link') return;
+      e.preventDefault();
+      e.stopPropagation();
+      row.classList.add('drag-over-row');
+    });
+
+    row.addEventListener('dragleave', e => {
+      if (!row.contains(e.relatedTarget)) row.classList.remove('drag-over-row');
+    });
+
+    row.addEventListener('drop', e => {
+      e.stopPropagation();
+      row.classList.remove('drag-over-row');
+      if (!_drag || _drag.type !== 'link') return;
+
+      const freshData = loadLinks();
+      const srcCat = freshData.categories.find(c => c.id === _drag.catId);
+      const tgtCat = freshData.categories.find(c => c.id === cat.id);
+      if (!srcCat || !tgtCat) return;
+
+      const movedLink = srcCat.links.find(l => l.id === _drag.linkId);
+      if (!movedLink) return;
+
+      // Only proceed if target card list doesn't already handle the drop
+      const landedOnCard = (e.target instanceof Element) && e.target.closest('.link-card');
+      if (landedOnCard) return;
+
+      srcCat.links = srcCat.links.filter(l => l.id !== _drag.linkId);
+      tgtCat.links.push(movedLink);
+
+      saveLinks(freshData);
+      rerender();
+    });
   }
 }
