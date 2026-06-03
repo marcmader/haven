@@ -1,4 +1,128 @@
-// Entry point — wired in Task 12
-document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('boot-check').textContent = 'Haven boot OK';
+import { loadSettings, saveSettings, loadLinks, loadStats, incrementOpenCount } from './storage.js';
+import { detectLang, getGreeting, t } from './i18n.js';
+import { applyTheme, updateLogoColors, applyCustomTheme, watchSystemTheme, isEffectivelyLight } from './theme.js';
+import { startClock } from './clock.js';
+import { loadQuotes, getDailyQuote, renderQuote } from './quotes.js';
+import { initWeather, startWeatherRefresh } from './weather.js';
+import { renderCategories } from './links.js';
+import { initSettings } from './settings.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
+
+  // ── 1. Load persistent state ─────────────────────────────────
+  const settings = loadSettings();
+  const data     = loadLinks();
+  const lang     = detectLang(settings.lang);
+
+  // ── 2. Apply theme ───────────────────────────────────────────
+  applyTheme(settings.theme);
+  if (settings.customTheme) applyCustomTheme(settings.customTheme);
+  updateLogoColors(isEffectivelyLight());
+
+  // Keep logo colors in sync when OS theme changes (for auto mode)
+  watchSystemTheme(isLight => {
+    if (settings.theme === 'auto') updateLogoColors(isLight);
+  });
+
+  // ── 3. Clock ─────────────────────────────────────────────────
+  const clockEl = document.getElementById('clock-time');
+  const dateEl  = document.getElementById('clock-date');
+  let clockId = startClock({ clockEl, dateEl }, lang);
+
+  // ── 4. Quotes ────────────────────────────────────────────────
+  try {
+    const quotes = await loadQuotes();
+    const quote  = getDailyQuote(quotes);
+    renderQuote(quote, {
+      textEl:   document.getElementById('quote-text'),
+      authorEl: document.getElementById('quote-author'),
+    });
+  } catch (err) {
+    console.warn('Haven: failed to load quotes', err.message);
+  }
+
+  // ── 5. Weather ───────────────────────────────────────────────
+  const weatherEls = {
+    iconEl:     document.getElementById('w-icon'),
+    tempEl:     document.getElementById('w-temp'),
+    cityEl:     document.getElementById('w-city'),
+    descEl:     document.getElementById('w-desc'),
+    forecastEl: document.getElementById('fc-pills'),
+  };
+  initWeather(weatherEls, lang);
+  startWeatherRefresh(weatherEls, lang);
+
+  // ── 6. Links ─────────────────────────────────────────────────
+  const contentEl = document.getElementById('content');
+  renderCategories(data, settings, contentEl);
+
+  // ── 7. Settings modal ─────────────────────────────────────────
+  const greetingEl = document.getElementById('greeting');
+  initSettings({
+    greetingEl,
+    statLinksEl: document.getElementById('stat-links'),
+    statCatsEl:  document.getElementById('stat-cats'),
+    statTodayEl: document.getElementById('stat-today'),
+    categoriesContainer: contentEl,
+    clockEl,
+    dateEl,
+    startClock,
+    _clockId: clockId,
+  });
+
+  // ── 8. Greeting ───────────────────────────────────────────────
+  _renderGreeting(greetingEl, lang, settings.userName);
+
+  // ── 9. Stats ──────────────────────────────────────────────────
+  const stats = incrementOpenCount();
+  _renderStats(data, stats, lang);
+
+  // ── 10. Search ────────────────────────────────────────────────
+  document.getElementById('search-form')?.addEventListener('submit', e => {
+    e.preventDefault();
+    const query = document.getElementById('search-input')?.value.trim();
+    if (query) {
+      window.open(`https://www.google.com/search?q=${encodeURIComponent(query)}`, '_blank');
+    }
+  });
+
+  // Update search placeholder with i18n
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) searchInput.placeholder = t(lang, 'searchPlaceholder');
+
+  // Update modal title with i18n
+  const modalTitle = document.getElementById('modal-title');
+  if (modalTitle) modalTitle.textContent = t(lang, 'settingsTitle');
 });
+
+// ── Helpers ──────────────────────────────────────────────────────
+
+function _renderGreeting(greetingEl, lang, userName) {
+  if (!greetingEl) return;
+  const base = getGreeting(lang, '');
+  if (userName) {
+    greetingEl.innerHTML = `${base}, <span class="greeting-name">${userName}</span>`;
+  } else {
+    greetingEl.textContent = base;
+  }
+}
+
+function _renderStats(data, stats, lang) {
+  const totalLinks = data.categories.reduce((sum, c) => sum + c.links.length, 0);
+
+  const linksEl = document.getElementById('stat-links');
+  const catsEl  = document.getElementById('stat-cats');
+  const todayEl = document.getElementById('stat-today');
+
+  if (linksEl) linksEl.textContent = totalLinks;
+  if (catsEl)  catsEl.textContent  = data.categories.length;
+  if (todayEl) todayEl.textContent = stats.openCount;
+
+  // i18n stat labels
+  const llEl = document.getElementById('stat-links-label');
+  const clEl = document.getElementById('stat-cats-label');
+  const tlEl = document.getElementById('stat-today-label');
+  if (llEl) llEl.textContent = t(lang, 'linksLabel');
+  if (clEl) clEl.textContent = t(lang, 'categoriesLabel');
+  if (tlEl) tlEl.textContent = t(lang, 'todayLabel');
+}
