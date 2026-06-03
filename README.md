@@ -8,7 +8,7 @@ A personal browser start page with categorized links, live weather, a ticking cl
 
 ## Features
 
-- **Categorized links** — organize bookmarks into named categories, displayed in a 6-column card grid with favicons (letter avatars as fallback)
+- **Categorized links** — organize bookmarks into named categories, displayed in a 6-column card grid with favicons; full add/edit/delete support
 - **Clock & weather** — live clock with localized date, current conditions + 3-day forecast via Open-Meteo (no API key required)
 - **Quote of the day** — daily motivational quote from a curated set of 51 quotes, displayed in the topbar
 - **Personalized greeting** — time-based greeting (morning/afternoon/evening/night) with optional name, centered in the topbar
@@ -37,7 +37,7 @@ A personal browser start page with categorized links, live weather, a ticking cl
 | Data | `localStorage` |
 | Weather | [Open-Meteo API](https://open-meteo.com/) (free, no key) |
 | Geocoding | [Nominatim](https://nominatim.org/) (OpenStreetMap) |
-| Favicons | Google Favicon Service |
+| Icons | Google Favicon Service + [Simple Icons](https://simpleicons.org/) CDN |
 | Hosting | GitHub Pages |
 | Build | None |
 
@@ -58,7 +58,7 @@ haven/
     ├── clock.js        # Live clock with i18n date
     ├── weather.js      # Open-Meteo + Nominatim + WMO emoji mapping
     ├── quotes.js       # Daily quote selection + render
-    ├── links.js        # Category + link card rendering, favicon/avatar
+    ├── links.js        # Category + link card rendering, icon fallback chain
     └── settings.js     # Settings modal interactions
 ```
 
@@ -70,7 +70,7 @@ All data lives in `localStorage` under these keys:
 
 | Key | Contents |
 |---|---|
-| `haven_links` | `{ categories: [{ id, name, links: [{ id, url, name, description }] }] }` |
+| `haven_links` | `{ categories: [{ id, name, links: [{ id, url, name, description, iconSlug? }] }] }` |
 | `haven_settings` | `{ theme, lang, userName, linkTarget, customTheme }` |
 | `haven_stats` | `{ date, openCount }` — resets daily |
 | `haven_custom_theme` | Custom color token overrides (optional) |
@@ -88,9 +88,9 @@ Open the ⚙ button in the top-right corner to access:
 | Custom theme | Background · Topbar · Accent · Text color pickers |
 | Name | Used in the topbar greeting |
 | Link behavior | New tab (`_blank`) or same window (`_self`) |
-| Manage links | Delete individual links or entire categories |
+| Manage links | Edit or delete individual links; delete entire categories |
 | Add category | Name a new category |
-| Add link | URL, name, description, target category |
+| Add link | URL, name, description, icon slug (optional), target category |
 | Export | Downloads `haven-backup-YYYY-MM-DD.json` |
 | Import | Restores from a previously exported JSON file |
 
@@ -144,9 +144,13 @@ To deploy your own fork:
 - No API key required, free to use
 - Usage policy: one request per weather refresh (every 30 min)
 
-### Google Favicon Service
-- URL pattern: `https://www.google.com/s2/favicons?domain=<hostname>&sz=64`
-- Falls back to letter avatar (colored square with first letter) if the favicon fails to load
+### Icon resolution (fallback chain)
+
+For each link, icons are resolved in this order:
+
+1. **Google Favicon Service** — `https://www.google.com/s2/favicons?domain=<hostname>&sz=64` — fetches the actual site favicon
+2. **Simple Icons CDN** — `https://cdn.simpleicons.org/<slug>/<accent-color>` — brand SVG in the current accent color; auto-detected from the domain name, or set manually via the *Icon Slug* field in the add-link form (full catalogue at [simpleicons.org](https://simpleicons.org))
+3. **Letter avatar** — colored square with the first letter of the link name; used for IP addresses or any link where neither favicon nor Simple Icon is available
 
 ---
 
