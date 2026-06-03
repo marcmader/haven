@@ -843,3 +843,43 @@ input, select { font: inherit; }
   gap: 8px;
   align-items: center;
 }
+
+/* ── Footer ──────────────────────────────────────────────────── */
+.page-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 12px 48px 20px;
+  border-top: 1px solid var(--border);
+}
+
+.footer-privacy {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+}
+
+.footer-privacy a {
+  color: var(--text-tertiary);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-privacy a:hover {
+  color: var(--text-secondary);
+}
+
+.footer-repo {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-repo:hover {
+  color: var(--accent);
+}

@@ -30,8 +30,7 @@ function _domainToSlug(hostname) {
 }
 
 /**
- * Create a favicon element. Falls back through: Simple Icons → Google Favicon → letter avatar.
- * If iconSlug is provided it goes directly to Simple Icons (skipping Google Favicon fallback).
+ * Create a favicon element using Simple Icons CDN, falling back to a letter avatar.
  * @param {string} url
  * @param {string} name
  * @param {string} [iconSlug] — explicit Simple Icons slug (e.g. "homeassistant")
@@ -42,12 +41,10 @@ export function createFaviconEl(url, name, iconSlug) {
   wrapper.className = 'favicon-wrapper';
 
   let slug = iconSlug || null;
-  let domain = null;
 
   if (!slug) {
     try {
-      domain = new URL(url).hostname;
-      slug = _domainToSlug(domain);
+      slug = _domainToSlug(new URL(url).hostname);
     } catch {
       wrapper.appendChild(createAvatarEl(name));
       return wrapper;
@@ -62,25 +59,8 @@ export function createFaviconEl(url, name, iconSlug) {
   siImg.width = 28;
   siImg.height = 28;
 
-  if (iconSlug) {
-    // Manual slug: Simple Icons → avatar
-    siImg.onerror = () => siImg.replaceWith(createAvatarEl(name));
-    wrapper.appendChild(siImg);
-  } else {
-    // Auto: Google Favicon → Simple Icons → avatar
-    const gImg = document.createElement('img');
-    gImg.className = 'favicon-img';
-    gImg.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-    gImg.alt = name;
-    gImg.width = 28;
-    gImg.height = 28;
-    gImg.onerror = () => {
-      siImg.onerror = () => siImg.replaceWith(createAvatarEl(name));
-      gImg.replaceWith(siImg);
-    };
-    wrapper.appendChild(gImg);
-  }
-
+  siImg.onerror = () => siImg.replaceWith(createAvatarEl(name));
+  wrapper.appendChild(siImg);
   return wrapper;
 }
 
