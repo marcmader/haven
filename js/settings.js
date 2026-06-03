@@ -25,6 +25,17 @@ export function initSettings(deps) {
 
   if (!overlay || !modal) return;
 
+  // ── Tab switching ─────────────────────────────────────────────────────────
+
+  modal.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      modal.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      modal.querySelectorAll('.tab-panel').forEach(p => p.classList.add('tab-panel--hidden'));
+      btn.classList.add('active');
+      modal.querySelector(`.tab-panel[data-tab="${btn.dataset.tab}"]`)?.classList.remove('tab-panel--hidden');
+    });
+  });
+
   // ── Open / Close ──────────────────────────────────────────────────────────
 
   document.getElementById('settings-btn')?.addEventListener('click', () => {

@@ -115,131 +115,133 @@
   <!-- ── Settings Modal ───────────────────────────────────────── -->
   <div class="modal-overlay" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
     <div class="modal">
-      <h2 class="modal-title" id="modal-title">Einstellungen</h2>
-      <div class="modal-divider"></div>
 
-      <!-- Language -->
-      <div class="modal-section">
-        <div class="modal-section-title">Sprache</div>
-        <div class="lang-selector">
-          <button class="lang-opt" data-lang="de">🇩🇪 Deutsch</button>
-          <button class="lang-opt" data-lang="en">🇬🇧 English</button>
-          <button class="lang-opt" data-lang="fr">🇫🇷 Français</button>
-          <button class="lang-opt" data-lang="es">🇪🇸 Español</button>
+      <!-- Header + Tab Bar -->
+      <div class="modal-header">
+        <h2 class="modal-title" id="modal-title">Einstellungen</h2>
+        <div class="tab-bar">
+          <button class="tab-btn active" data-tab="general">Allgemein</button>
+          <button class="tab-btn" data-tab="links">Links</button>
+          <button class="tab-btn" data-tab="data">Daten</button>
         </div>
       </div>
 
-      <div class="modal-divider"></div>
+      <!-- ── Tab: Allgemein ───────────────────────────────────── -->
+      <div class="tab-panel" data-tab="general">
+        <div class="tab-grid-2">
 
-      <!-- Theme -->
-      <div class="modal-section">
-        <div class="modal-section-title">Erscheinungsbild</div>
-        <div class="theme-selector">
-          <button class="theme-opt" data-theme-opt="auto">Auto</button>
-          <button class="theme-opt" data-theme-opt="dark">Dunkel</button>
-          <button class="theme-opt" data-theme-opt="light">Hell</button>
-        </div>
-      </div>
-
-      <div class="modal-divider"></div>
-
-      <!-- Custom Theme -->
-      <div class="modal-section">
-        <div class="modal-section-title">Custom Theme</div>
-        <div class="custom-theme-grid">
-          <label class="color-row">
-            <input type="color" data-token="bg" value="#0a0a14">
-            Hintergrund
-          </label>
-          <label class="color-row">
-            <input type="color" data-token="bgTopbar" value="#0a0a14">
-            Topbar
-          </label>
-          <label class="color-row">
-            <input type="color" data-token="accent" value="#818cf8">
-            Akzent
-          </label>
-          <label class="color-row">
-            <input type="color" data-token="textPrimary" value="#e8e8f4">
-            Text
-          </label>
-        </div>
-      </div>
-
-      <div class="modal-divider"></div>
-
-      <!-- Greeting Name -->
-      <div class="modal-section">
-        <div class="modal-section-title">Begrüßung</div>
-        <input
-          class="modal-input"
-          id="setting-name"
-          type="text"
-          placeholder="Dein Name"
-          autocomplete="off"
-          maxlength="40"
-        >
-      </div>
-
-      <div class="modal-divider"></div>
-
-      <!-- Link Target -->
-      <div class="modal-section">
-        <div class="modal-section-title">Link-Verhalten</div>
-        <div class="target-selector">
-          <button class="target-opt" data-target-opt="_blank">Neues Tab</button>
-          <button class="target-opt" data-target-opt="_self">Gleiches Fenster</button>
-        </div>
-      </div>
-
-      <div class="modal-divider"></div>
-
-      <!-- Manage Links -->
-      <div class="modal-section">
-        <div class="modal-section-title">Links verwalten</div>
-        <div id="manage-links-list"></div>
-      </div>
-
-      <div class="modal-divider"></div>
-
-      <!-- Add Category -->
-      <div class="modal-section">
-        <div class="modal-section-title">Kategorie hinzufügen</div>
-        <form class="add-form" id="add-category-form">
-          <input class="modal-input" id="input-cat-name" type="text" placeholder="Kategoriename" required>
-          <button class="add-btn" type="submit">Hinzufügen</button>
-        </form>
-      </div>
-
-      <div class="modal-divider"></div>
-
-      <!-- Add Link -->
-      <div class="modal-section">
-        <div class="modal-section-title">Neuen Link hinzufügen</div>
-        <form class="add-form" id="add-link-form">
-          <input class="modal-input" id="input-url"  type="url"  placeholder="URL (https://…)" required>
-          <input class="modal-input" id="input-name" type="text" placeholder="Name" required>
-          <input class="modal-input" id="input-desc" type="text" placeholder="Beschreibung (optional)">
-          <input class="modal-input" id="input-icon-slug" type="text" placeholder="Icon Slug – simpleicons.org (optional, z.B. homeassistant)">
-          <select class="modal-input" id="input-cat">
-            <!-- populated by settings.js -->
-          </select>
-          <div class="form-actions">
-            <button class="add-btn" type="submit" id="link-submit-btn">Hinzufügen</button>
-            <button class="cancel-btn" type="button" id="cancel-edit-btn" style="display:none">Abbrechen</button>
+          <div class="modal-section">
+            <div class="modal-section-title">Sprache</div>
+            <div class="lang-selector">
+              <button class="lang-opt" data-lang="de">🇩🇪 Deutsch</button>
+              <button class="lang-opt" data-lang="en">🇬🇧 English</button>
+              <button class="lang-opt" data-lang="fr">🇫🇷 Français</button>
+              <button class="lang-opt" data-lang="es">🇪🇸 Español</button>
+            </div>
           </div>
-        </form>
+
+          <div class="modal-section">
+            <div class="modal-section-title">Erscheinungsbild</div>
+            <div class="theme-selector">
+              <button class="theme-opt" data-theme-opt="auto">Auto</button>
+              <button class="theme-opt" data-theme-opt="dark">Dunkel</button>
+              <button class="theme-opt" data-theme-opt="light">Hell</button>
+            </div>
+          </div>
+
+          <div class="modal-section">
+            <div class="modal-section-title">Begrüßung</div>
+            <input class="modal-input" id="setting-name" type="text" placeholder="Dein Name" autocomplete="off" maxlength="40">
+          </div>
+
+          <div class="modal-section">
+            <div class="modal-section-title">Link-Verhalten</div>
+            <div class="target-selector">
+              <button class="target-opt" data-target-opt="_blank">Neues Tab</button>
+              <button class="target-opt" data-target-opt="_self">Gleiches Fenster</button>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="modal-divider"></div>
+
+        <div class="modal-section">
+          <div class="modal-section-title">Custom Theme</div>
+          <div class="custom-theme-grid">
+            <label class="color-row">
+              <input type="color" data-token="bg" value="#0a0a14">
+              Hintergrund
+            </label>
+            <label class="color-row">
+              <input type="color" data-token="bgTopbar" value="#0a0a14">
+              Topbar
+            </label>
+            <label class="color-row">
+              <input type="color" data-token="accent" value="#818cf8">
+              Akzent
+            </label>
+            <label class="color-row">
+              <input type="color" data-token="textPrimary" value="#e8e8f4">
+              Text
+            </label>
+          </div>
+        </div>
       </div>
 
-      <div class="modal-divider"></div>
+      <!-- ── Tab: Links ───────────────────────────────────────── -->
+      <div class="tab-panel tab-panel--hidden" data-tab="links">
+        <div class="tab-links-grid">
 
-      <!-- Data -->
-      <div class="modal-section">
-        <div class="modal-section-title">Daten</div>
-        <div class="data-buttons">
-          <button class="data-btn" id="export-btn">Export JSON</button>
-          <button class="data-btn" id="import-btn">Import JSON</button>
-          <input type="file" id="import-file" accept=".json" style="display:none">
+          <div class="tab-links-left">
+            <div class="modal-section">
+              <div class="modal-section-title">Links verwalten</div>
+              <div id="manage-links-list"></div>
+            </div>
+          </div>
+
+          <div class="tab-links-right">
+            <div class="modal-section">
+              <div class="modal-section-title">Kategorie hinzufügen</div>
+              <form class="add-form" id="add-category-form">
+                <input class="modal-input" id="input-cat-name" type="text" placeholder="Kategoriename" required>
+                <button class="add-btn" type="submit">Hinzufügen</button>
+              </form>
+            </div>
+
+            <div class="modal-divider"></div>
+
+            <div class="modal-section">
+              <div class="modal-section-title">Neuen Link hinzufügen</div>
+              <form class="add-form" id="add-link-form">
+                <input class="modal-input" id="input-url" type="url" placeholder="URL (https://…)" required>
+                <input class="modal-input" id="input-name" type="text" placeholder="Name" required>
+                <input class="modal-input" id="input-desc" type="text" placeholder="Beschreibung (optional)">
+                <input class="modal-input" id="input-icon-slug" type="text" placeholder="Icon Slug – simpleicons.org (optional)">
+                <select class="modal-input" id="input-cat">
+                  <!-- populated by settings.js -->
+                </select>
+                <div class="form-actions">
+                  <button class="add-btn" type="submit" id="link-submit-btn">Hinzufügen</button>
+                  <button class="cancel-btn" type="button" id="cancel-edit-btn" style="display:none">Abbrechen</button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ── Tab: Daten ───────────────────────────────────────── -->
+      <div class="tab-panel tab-panel--hidden" data-tab="data">
+        <div class="modal-section">
+          <div class="modal-section-title">Backup</div>
+          <p class="modal-hint">Exportiere alle Daten als JSON-Datei oder stelle ein vorhandenes Backup wieder her.</p>
+          <div class="data-buttons">
+            <button class="data-btn" id="export-btn">↓ Export JSON</button>
+            <button class="data-btn" id="import-btn">↑ Import JSON</button>
+            <input type="file" id="import-file" accept=".json" style="display:none">
+          </div>
         </div>
       </div>
 

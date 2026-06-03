@@ -502,27 +502,97 @@ input, select { font: inherit; }
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 20px;
-  width: min(520px, calc(100vw - 32px));
-  max-height: 82vh;
-  overflow-y: auto;
-  padding: 28px;
+  width: min(900px, calc(100vw - 48px));
+  max-height: 88vh;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px 0;
+  flex-shrink: 0;
 }
 
 .modal-title {
   font-size: 18px;
   font-weight: 700;
   color: var(--text-primary);
-  margin-bottom: 4px;
+}
+
+/* ── Tab Bar ─────────────────────────────────────────────────── */
+.tab-bar {
+  display: flex;
+  gap: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 3px;
+}
+
+.tab-btn {
+  padding: 6px 18px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: background 0.15s, color 0.15s;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ── Tab Panels ──────────────────────────────────────────────── */
+.tab-panel {
+  padding: 24px 28px 28px;
+  overflow-y: auto;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.tab-panel--hidden {
+  display: none;
+}
+
+.tab-grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px 32px;
+}
+
+.tab-links-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  flex: 1;
+}
+
+.tab-links-left,
+.tab-links-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 0;
 }
 
 .modal-divider {
   height: 1px;
   background: var(--border);
   margin: 4px 0;
+  flex-shrink: 0;
 }
 
 .modal-section {
@@ -537,6 +607,12 @@ input, select { font: inherit; }
   letter-spacing: 1.5px;
   text-transform: uppercase;
   color: var(--text-tertiary);
+}
+
+.modal-hint {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
 }
 
 /* ── Selector Groups (theme / lang / target) ─────────────────── */
@@ -651,7 +727,7 @@ input, select { font: inherit; }
   display: flex;
   flex-direction: column;
   gap: 12px;
-  max-height: 260px;
+  max-height: 420px;
   overflow-y: auto;
 }
 
