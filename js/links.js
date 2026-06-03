@@ -91,6 +91,7 @@ export function renderLinkCard(link, settings, catId, rerender) {
 
   // ── Link drag events ────────────────────────────────────────────────────
   a.addEventListener('dragstart', e => {
+    if (!document.body.classList.contains('edit-mode')) return;
     e.stopPropagation();
     _drag = { type: 'link', linkId: link.id, catId };
     e.dataTransfer.effectAllowed = 'move';
