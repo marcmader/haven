@@ -169,6 +169,6 @@ MIT
 
 ---
 
-## Hinweis
+## Note
 
-Dieses Projekt wurde vollständig mit Unterstützung von [Claude](https://claude.ai) (Anthropic) erstellt — von der Konzeption über das Design bis zur Implementierung.
+This project was built entirely with the help of [Claude](https://claude.ai) (Anthropic) — from concept and design to implementation.
