@@ -454,6 +454,9 @@ input, select { font: inherit; }
   font-weight: 700;
   line-height: 1;
   flex-shrink: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border-hover);
+  color: var(--accent);
 }
 
 .link-info {

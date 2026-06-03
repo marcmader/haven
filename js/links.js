@@ -1,24 +1,3 @@
-// 8 color pairs [background, text] for letter avatars
-const AVATAR_COLORS = [
-  ['#7c3aed', '#fff'],
-  ['#2563eb', '#fff'],
-  ['#059669', '#fff'],
-  ['#d97706', '#fff'],
-  ['#dc2626', '#fff'],
-  ['#db2777', '#fff'],
-  ['#0891b2', '#fff'],
-  ['#4f46e5', '#fff'],
-];
-
-/**
- * Pick a deterministic color pair from a link name.
- * @param {string} name
- * @returns {[string, string]} [bgColor, textColor]
- */
-export function getAvatarColor(name) {
-  const idx = (name.charCodeAt(0) || 0) % AVATAR_COLORS.length;
-  return AVATAR_COLORS[idx];
-}
 
 function _accentHex() {
   return getComputedStyle(document.documentElement)
@@ -65,12 +44,9 @@ export function createFaviconEl(url, name, iconSlug) {
 }
 
 function createAvatarEl(name) {
-  const [bg, color] = getAvatarColor(name);
   const span = document.createElement('span');
   span.className = 'avatar-letter';
   span.textContent = (name[0] || '?').toUpperCase();
-  span.style.background = bg;
-  span.style.color = color;
   return span;
 }
 
