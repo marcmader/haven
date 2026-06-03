@@ -53,13 +53,10 @@ document.addEventListener('DOMContentLoaded', async () => {
   initWeather(weatherEls, lang);
   startWeatherRefresh(weatherEls, lang);
 
-  // ── 6. Links ─────────────────────────────────────────────────
+  // ── 6. Settings modal (before links so we have the control object) ───
   const contentEl = document.getElementById('content');
-  renderCategories(data, settings, contentEl);
-
-  // ── 7. Settings modal ─────────────────────────────────────────
   const greetingEl = document.getElementById('greeting');
-  initSettings({
+  const settingsCtrl = initSettings({
     greetingEl,
     statLinksEl: document.getElementById('stat-links'),
     statCatsEl:  document.getElementById('stat-cats'),
@@ -71,7 +68,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     _clockId: clockId,
   });
 
-  // ── 8. Greeting ───────────────────────────────────────────────
+  // ── 7. Links ──────────────────────────────────────────────────
+  renderCategories(data, settings, contentEl, {
+    onAddLink: (catId) => settingsCtrl.openToAddLink(catId),
+  });
+
+  // ── 8. Greeting ──────────────────────────────────────────────
   _renderGreeting(greetingEl, lang, settings.userName);
 
   // ── 9. Stats ──────────────────────────────────────────────────

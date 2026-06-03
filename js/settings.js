@@ -287,6 +287,22 @@ export function initSettings(deps) {
     };
     reader.readAsText(file);
   });
+
+  // ── Public control ────────────────────────────────────────────────────────
+  return {
+    openToAddLink(catId) {
+      _populateModal();
+      modal.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      modal.querySelectorAll('.tab-panel').forEach(p => p.classList.add('tab-panel--hidden'));
+      modal.querySelector('.tab-btn[data-tab="links"]')?.classList.add('active');
+      modal.querySelector('.tab-panel[data-tab="links"]')?.classList.remove('tab-panel--hidden');
+      if (catId) {
+        const catSelect = modal.querySelector('#input-cat');
+        if (catSelect) catSelect.value = catId;
+      }
+      overlay.classList.add('open');
+    },
+  };
 }
 
 // ── Private helpers ──────────────────────────────────────────────────────────
