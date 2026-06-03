@@ -313,11 +313,23 @@ body.edit-mode .category {
   border-radius: var(--radius-sm);
 }
 
-/* ── Content Area ────────────────────────────────────────────── */
+/* ── Hero Section (sticky) ───────────────────────────────────── */
+.hero-section {
+  position: sticky;
+  top: 52px;
+  z-index: 50;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  padding: 24px 48px 20px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ── Categories Content Area ─────────────────────────────────── */
 .content {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 32px 48px;
+  padding: 28px 48px 32px;
   display: flex;
   flex-direction: column;
   gap: 32px;
