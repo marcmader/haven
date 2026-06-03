@@ -125,10 +125,15 @@ export function initSettings(deps) {
     _renderManageLinks(modal, data, settings, deps);
   });
 
-  // ── Add link form ─────────────────────────────────────────────────────────
+  // ── Add / Edit link form ──────────────────────────────────────────────────
+
+  modal.querySelector('#cancel-edit-btn')?.addEventListener('click', () => {
+    _exitEditMode(modal);
+  });
 
   modal.querySelector('#add-link-form')?.addEventListener('submit', e => {
     e.preventDefault();
+    const form      = modal.querySelector('#add-link-form');
     const urlInput  = modal.querySelector('#input-url');
     const nameInput = modal.querySelector('#input-name');
     const descInput = modal.querySelector('#input-desc');
@@ -143,22 +148,54 @@ export function initSettings(deps) {
 
     if (!url || !name || !catId) return;
 
-    const data = loadLinks();
-    const cat = data.categories.find(c => c.id === catId);
-    if (!cat) return;
+    const data        = loadLinks();
+    const editLinkId  = form?.dataset.editLinkId;
+    const editCatId   = form?.dataset.editCatId;
 
-    cat.links.push({ id: uuid(), url, name, description: desc, iconSlug });
+    if (editLinkId && editCatId) {
+      const updatedLink = { id: editLinkId, url, name, description: desc, iconSlug };
+      if (editCatId === catId) {
+        const cat = data.categories.find(c => c.id === editCatId);
+        if (cat) {
+          const idx = cat.links.findIndex(l => l.id === editLinkId);
+          if (idx !== -1) cat.links[idx] = updatedLink;
+        }
+      } else {
+        const oldCat = data.categories.find(c => c.id === editCatId);
+        if (oldCat) oldCat.links = oldCat.links.filter(l => l.id !== editLinkId);
+        const newCat = data.categories.find(c => c.id === catId);
+        if (newCat) newCat.links.push(updatedLink);
+      }
+      _exitEditMode(modal);
+    } else {
+      const cat = data.categories.find(c => c.id === catId);
+      if (!cat) return;
+      cat.links.push({ id: uuid(), url, name, description: desc, iconSlug });
+      urlInput.value = '';
+      nameInput.value = '';
+      if (descInput) descInput.value = '';
+      if (slugInput) slugInput.value = '';
+    }
+
     saveLinks(data);
-
-    urlInput.value = '';
-    nameInput.value = '';
-    if (descInput) descInput.value = '';
-    if (slugInput) slugInput.value = '';
-
     const settings = loadSettings();
     renderCategories(data, settings, deps.categoriesContainer);
     _renderManageLinks(modal, data, settings, deps);
     _populateCategorySelect(modal, data);
+  });
+
+  // ── Edit link ─────────────────────────────────────────────────────────────
+
+  modal.addEventListener('click', e => {
+    const btn = e.target.closest('[data-edit-link]');
+    if (!btn) return;
+    const { catId, linkId } = btn.dataset;
+    const data = loadLinks();
+    const cat  = data.categories.find(c => c.id === catId);
+    const link = cat?.links.find(l => l.id === linkId);
+    if (!link) return;
+    _populateCategorySelect(modal, data);
+    _enterEditMode(modal, link, catId);
   });
 
   // ── Delete link ───────────────────────────────────────────────────────────
@@ -304,14 +341,24 @@ function _renderManageLinks(modal, data, settings, deps) {
       row.className = 'link-row';
       const nameSpan = document.createElement('span');
       nameSpan.textContent = link.name;
+      const editBtn = document.createElement('button');
+      editBtn.className = 'edit-btn';
+      editBtn.textContent = 'Bearbeiten';
+      editBtn.dataset.editLink = '';
+      editBtn.dataset.catId = cat.id;
+      editBtn.dataset.linkId = link.id;
       const delBtn = document.createElement('button');
       delBtn.className = 'delete-btn';
       delBtn.textContent = t(lang, 'deleteBtn');
       delBtn.dataset.deleteLink = '';
       delBtn.dataset.catId = cat.id;
       delBtn.dataset.linkId = link.id;
+      const btnGroup = document.createElement('div');
+      btnGroup.className = 'link-btn-group';
+      btnGroup.appendChild(editBtn);
+      btnGroup.appendChild(delBtn);
       row.appendChild(nameSpan);
-      row.appendChild(delBtn);
+      row.appendChild(btnGroup);
       section.appendChild(row);
     }
 
@@ -349,4 +396,52 @@ function _greetingHTML(lang, userName) {
     return `${greeting}, <span class="greeting-name">${userName}</span>`;
   }
   return greeting;
+}
+
+function _enterEditMode(modal, link, catId) {
+  const form      = modal.querySelector('#add-link-form');
+  const submitBtn = modal.querySelector('#link-submit-btn');
+  const cancelBtn = modal.querySelector('#cancel-edit-btn');
+  if (!form) return;
+
+  form.dataset.editLinkId = link.id;
+  form.dataset.editCatId  = catId;
+
+  const urlInput  = modal.querySelector('#input-url');
+  const nameInput = modal.querySelector('#input-name');
+  const descInput = modal.querySelector('#input-desc');
+  const slugInput = modal.querySelector('#input-icon-slug');
+  const catSelect = modal.querySelector('#input-cat');
+
+  if (urlInput)  urlInput.value  = link.url;
+  if (nameInput) nameInput.value = link.name;
+  if (descInput) descInput.value = link.description || '';
+  if (slugInput) slugInput.value = link.iconSlug || '';
+  if (catSelect) catSelect.value = catId;
+  if (submitBtn) submitBtn.textContent = 'Speichern';
+  if (cancelBtn) cancelBtn.style.display = '';
+
+  form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function _exitEditMode(modal) {
+  const form      = modal.querySelector('#add-link-form');
+  const submitBtn = modal.querySelector('#link-submit-btn');
+  const cancelBtn = modal.querySelector('#cancel-edit-btn');
+  if (!form) return;
+
+  delete form.dataset.editLinkId;
+  delete form.dataset.editCatId;
+
+  const urlInput  = modal.querySelector('#input-url');
+  const nameInput = modal.querySelector('#input-name');
+  const descInput = modal.querySelector('#input-desc');
+  const slugInput = modal.querySelector('#input-icon-slug');
+
+  if (urlInput)  urlInput.value  = '';
+  if (nameInput) nameInput.value = '';
+  if (descInput) descInput.value = '';
+  if (slugInput) slugInput.value = '';
+  if (submitBtn) submitBtn.textContent = 'Hinzufügen';
+  if (cancelBtn) cancelBtn.style.display = 'none';
 }
