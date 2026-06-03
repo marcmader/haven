@@ -174,6 +174,7 @@ export function renderCategories(data, settings, container) {
     // ── Category drag events ──────────────────────────────────────────────
     section.addEventListener('dragstart', e => {
       if (_drag?.type === 'link') return;
+      if (!document.body.classList.contains('edit-mode')) return;
       _drag = { type: 'cat', catId: cat.id };
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('text/plain', 'cat');

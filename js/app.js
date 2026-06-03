@@ -93,6 +93,13 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Update modal title with i18n
   const modalTitle = document.getElementById('modal-title');
   if (modalTitle) modalTitle.textContent = t(lang, 'settingsTitle');
+
+  // ── 11. Edit mode toggle ───────────────────────────────────────────────
+  const editBtn = document.getElementById('edit-mode-btn');
+  editBtn?.addEventListener('click', () => {
+    const active = document.body.classList.toggle('edit-mode');
+    editBtn.classList.toggle('active', active);
+  });
 });
 
 // ── Helpers ──────────────────────────────────────────────────────

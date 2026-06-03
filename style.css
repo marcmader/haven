@@ -266,8 +266,9 @@ input, select { font: inherit; }
   flex-shrink: 0;
 }
 
-/* ── Settings Button ─────────────────────────────────────────── */
-.settings-btn {
+/* ── Settings + Edit Mode Buttons ────────────────────────────── */
+.settings-btn,
+.edit-mode-btn {
   width: 32px;
   height: 32px;
   display: flex;
@@ -277,12 +278,37 @@ input, select { font: inherit; }
   border: 1px solid var(--border);
   background: var(--bg-card);
   font-size: 16px;
-  transition: background 0.2s, border-color 0.2s;
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
 }
 
-.settings-btn:hover {
+.settings-btn:hover,
+.edit-mode-btn:hover {
   background: var(--border);
   border-color: var(--border-hover);
+}
+
+.edit-mode-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+}
+
+/* ── Edit Mode — category drag handles ───────────────────────── */
+body.edit-mode .cat-label {
+  cursor: grab;
+}
+
+body.edit-mode .cat-label::before {
+  content: '⠿';
+  margin-right: 8px;
+  opacity: 0.45;
+  font-size: 13px;
+}
+
+body.edit-mode .category {
+  outline: 1px dashed var(--border-hover);
+  outline-offset: 6px;
+  border-radius: var(--radius-sm);
 }
 
 /* ── Content Area ────────────────────────────────────────────── */
@@ -806,7 +832,6 @@ input, select { font: inherit; }
 ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
 
 /* ── Drag & Drop ─────────────────────────────────────────────── */
-.cat-label { cursor: grab; }
 
 .category.dragging   { opacity: 0.35; }
 .link-card.dragging  { opacity: 0.35; }
