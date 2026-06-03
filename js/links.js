@@ -20,33 +20,64 @@ export function getAvatarColor(name) {
   return AVATAR_COLORS[idx];
 }
 
+function _accentHex() {
+  return getComputedStyle(document.documentElement)
+    .getPropertyValue('--accent').trim().replace('#', '');
+}
+
+function _domainToSlug(hostname) {
+  return hostname.replace(/^www\./, '').split('.')[0].toLowerCase();
+}
+
 /**
- * Create a favicon image element that falls back to a letter avatar on error.
- * @param {string} url — full URL of the link
- * @param {string} name — link name (used for avatar letter + color)
+ * Create a favicon element. Falls back through: Simple Icons → Google Favicon → letter avatar.
+ * If iconSlug is provided it goes directly to Simple Icons (skipping Google Favicon fallback).
+ * @param {string} url
+ * @param {string} name
+ * @param {string} [iconSlug] — explicit Simple Icons slug (e.g. "homeassistant")
  * @returns {HTMLElement}
  */
-export function createFaviconEl(url, name) {
+export function createFaviconEl(url, name, iconSlug) {
   const wrapper = document.createElement('span');
   wrapper.className = 'favicon-wrapper';
 
-  try {
-    const domain = new URL(url).hostname;
-    const img = document.createElement('img');
-    img.className = 'favicon-img';
-    img.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-    img.alt = name;
-    img.width = 28;
-    img.height = 28;
-    img.onerror = () => {
-      img.replaceWith(createAvatarEl(name));
-    };
-    wrapper.appendChild(img);
-  } catch {
-    // Invalid URL — go straight to avatar
-    wrapper.appendChild(createAvatarEl(name));
+  let slug = iconSlug || null;
+  let domain = null;
+
+  if (!slug) {
+    try {
+      domain = new URL(url).hostname;
+      slug = _domainToSlug(domain);
+    } catch {
+      wrapper.appendChild(createAvatarEl(name));
+      return wrapper;
+    }
   }
 
+  const color = _accentHex();
+  const siImg = document.createElement('img');
+  siImg.className = 'favicon-img';
+  siImg.src = `https://cdn.simpleicons.org/${slug}/${color}`;
+  siImg.alt = name;
+  siImg.width = 28;
+  siImg.height = 28;
+
+  if (iconSlug) {
+    siImg.onerror = () => siImg.replaceWith(createAvatarEl(name));
+  } else {
+    siImg.onerror = () => {
+      const gImg = document.createElement('img');
+      gImg.className = 'favicon-img';
+      gImg.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+      gImg.alt = name;
+      gImg.width = 28;
+      gImg.height = 28;
+      gImg.onerror = () => gImg.replaceWith(createAvatarEl(name));
+      siImg.replaceWith(gImg);
+    };
+  }
+
+  wrapper.appendChild(siImg);
   return wrapper;
 }
 
@@ -73,7 +104,7 @@ export function renderLinkCard(link, settings) {
   a.target = settings.linkTarget || '_blank';
   if (settings.linkTarget === '_blank') a.rel = 'noopener noreferrer';
 
-  const favicon = createFaviconEl(link.url, link.name);
+  const favicon = createFaviconEl(link.url, link.name, link.iconSlug);
   const info = document.createElement('div');
   info.className = 'link-info';
 

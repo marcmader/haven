@@ -132,12 +132,14 @@ export function initSettings(deps) {
     const urlInput  = modal.querySelector('#input-url');
     const nameInput = modal.querySelector('#input-name');
     const descInput = modal.querySelector('#input-desc');
+    const slugInput = modal.querySelector('#input-icon-slug');
     const catSelect = modal.querySelector('#input-cat');
 
-    const url  = urlInput?.value.trim();
-    const name = nameInput?.value.trim();
-    const desc = descInput?.value.trim();
-    const catId = catSelect?.value;
+    const url      = urlInput?.value.trim();
+    const name     = nameInput?.value.trim();
+    const desc     = descInput?.value.trim();
+    const iconSlug = slugInput?.value.trim() || undefined;
+    const catId    = catSelect?.value;
 
     if (!url || !name || !catId) return;
 
@@ -145,12 +147,13 @@ export function initSettings(deps) {
     const cat = data.categories.find(c => c.id === catId);
     if (!cat) return;
 
-    cat.links.push({ id: uuid(), url, name, description: desc });
+    cat.links.push({ id: uuid(), url, name, description: desc, iconSlug });
     saveLinks(data);
 
     urlInput.value = '';
     nameInput.value = '';
     if (descInput) descInput.value = '';
+    if (slugInput) slugInput.value = '';
 
     const settings = loadSettings();
     renderCategories(data, settings, deps.categoriesContainer);
