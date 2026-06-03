@@ -134,6 +134,7 @@ export function initSettings(deps) {
     const settings = loadSettings();
     renderCategories(data, settings, deps.categoriesContainer);
     _renderManageLinks(modal, data, settings, deps);
+    _populateCategorySelect(modal, data);
   });
 
   // ── Add / Edit link form ──────────────────────────────────────────────────
