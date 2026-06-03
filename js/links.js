@@ -63,21 +63,24 @@ export function createFaviconEl(url, name, iconSlug) {
   siImg.height = 28;
 
   if (iconSlug) {
+    // Manual slug: Simple Icons → avatar
     siImg.onerror = () => siImg.replaceWith(createAvatarEl(name));
+    wrapper.appendChild(siImg);
   } else {
-    siImg.onerror = () => {
-      const gImg = document.createElement('img');
-      gImg.className = 'favicon-img';
-      gImg.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
-      gImg.alt = name;
-      gImg.width = 28;
-      gImg.height = 28;
-      gImg.onerror = () => gImg.replaceWith(createAvatarEl(name));
-      siImg.replaceWith(gImg);
+    // Auto: Google Favicon → Simple Icons → avatar
+    const gImg = document.createElement('img');
+    gImg.className = 'favicon-img';
+    gImg.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=64`;
+    gImg.alt = name;
+    gImg.width = 28;
+    gImg.height = 28;
+    gImg.onerror = () => {
+      siImg.onerror = () => siImg.replaceWith(createAvatarEl(name));
+      gImg.replaceWith(siImg);
     };
+    wrapper.appendChild(gImg);
   }
 
-  wrapper.appendChild(siImg);
   return wrapper;
 }
 
