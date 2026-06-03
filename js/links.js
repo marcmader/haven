@@ -115,10 +115,11 @@ export function renderLinkCard(link, settings, catId, rerender) {
   });
 
   a.addEventListener('drop', e => {
+    a.classList.remove('drag-over');
+    // Only handle link drops — let category drops bubble up to the section
+    if (!_drag || _drag.type !== 'link' || _drag.linkId === link.id) return;
     e.preventDefault();
     e.stopPropagation();
-    a.classList.remove('drag-over');
-    if (!_drag || _drag.type !== 'link' || _drag.linkId === link.id) return;
 
     const data = loadLinks();
     const srcCat = data.categories.find(c => c.id === _drag.catId);
@@ -172,7 +173,7 @@ export function renderCategories(data, settings, container) {
 
     // ── Category drag events ──────────────────────────────────────────────
     section.addEventListener('dragstart', e => {
-      if (_drag?.type === 'link') return; // link drag takes priority
+      if (_drag?.type === 'link') return;
       _drag = { type: 'cat', catId: cat.id };
       e.dataTransfer.effectAllowed = 'move';
       e.dataTransfer.setData('text/plain', 'cat');
@@ -195,9 +196,9 @@ export function renderCategories(data, settings, container) {
     });
 
     section.addEventListener('drop', e => {
-      e.preventDefault();
       section.classList.remove('drag-over-cat');
       if (!_drag || _drag.type !== 'cat' || _drag.catId === cat.id) return;
+      e.preventDefault();
 
       const freshData = loadLinks();
       const fromIdx = freshData.categories.findIndex(c => c.id === _drag.catId);
@@ -211,7 +212,7 @@ export function renderCategories(data, settings, container) {
       rerender();
     });
 
-    // Drop into empty category row (no link cards yet)
+    // ── Drop into category row (including empty categories) ───────────────
     row.addEventListener('dragover', e => {
       if (_drag?.type !== 'link') return;
       e.preventDefault();
@@ -224,9 +225,12 @@ export function renderCategories(data, settings, container) {
     });
 
     row.addEventListener('drop', e => {
-      e.stopPropagation();
       row.classList.remove('drag-over-row');
+      // Only handle link drops that didn't land on a specific card
       if (!_drag || _drag.type !== 'link') return;
+      if (e.target instanceof Element && e.target.closest('.link-card')) return;
+      e.preventDefault();
+      e.stopPropagation();
 
       const freshData = loadLinks();
       const srcCat = freshData.categories.find(c => c.id === _drag.catId);
@@ -235,10 +239,6 @@ export function renderCategories(data, settings, container) {
 
       const movedLink = srcCat.links.find(l => l.id === _drag.linkId);
       if (!movedLink) return;
-
-      // Only proceed if target card list doesn't already handle the drop
-      const landedOnCard = (e.target instanceof Element) && e.target.closest('.link-card');
-      if (landedOnCard) return;
 
       srcCat.links = srcCat.links.filter(l => l.id !== _drag.linkId);
       tgtCat.links.push(movedLink);

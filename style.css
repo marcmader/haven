@@ -405,6 +405,7 @@ input, select { font: inherit; }
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 8px;
+  min-height: 52px;
 }
 
 /* ── Link Card ───────────────────────────────────────────────── */
