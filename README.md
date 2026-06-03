@@ -166,3 +166,9 @@ For each link, icons are resolved in this order:
 ## License
 
 MIT
+
+---
+
+## Hinweis
+
+Dieses Projekt wurde vollständig mit Unterstützung von [Claude](https://claude.ai) (Anthropic) erstellt — von der Konzeption über das Design bis zur Implementierung.
