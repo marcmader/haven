@@ -9,12 +9,10 @@
   --bg-topbar:     rgba(10,10,20,0.85);
   --accent:        #818cf8;
   --accent-2:      #a78bfa;
-  --cat-label:     rgba(140,120,255,0.65);
   --text-primary:  #e8e8f4;
   --text-secondary:#a0a0bc;
   --text-tertiary: #60607a;
   --border:        rgba(255,255,255,0.08);
-  --border-hover:  rgba(129,140,248,0.45);
   --shadow:        0 4px 24px rgba(0,0,0,0.45);
   --radius-card:   12px;
   --radius-sm:     8px;
@@ -28,12 +26,10 @@
   --bg-topbar:     rgba(240,239,245,0.90);
   --accent:        #4f46e5;
   --accent-2:      #7c3aed;
-  --cat-label:     #5b21b6;
   --text-primary:  #12112a;
   --text-secondary:#4a4a6a;
   --text-tertiary: #8080a0;
   --border:        rgba(0,0,0,0.08);
-  --border-hover:  rgba(79,70,229,0.45);
   --shadow:        0 4px 24px rgba(0,0,0,0.12);
 }
 
@@ -48,12 +44,10 @@
     --bg-topbar:     rgba(240,239,245,0.90);
     --accent:        #4f46e5;
     --accent-2:      #7c3aed;
-    --cat-label:     #5b21b6;
     --text-primary:  #12112a;
     --text-secondary:#4a4a6a;
     --text-tertiary: #8080a0;
     --border:        rgba(0,0,0,0.08);
-    --border-hover:  rgba(79,70,229,0.45);
     --shadow:        0 4px 24px rgba(0,0,0,0.12);
   }
 }
@@ -287,7 +281,7 @@ input, select { font: inherit; }
 .edit-mode-btn:hover,
 .help-btn:hover {
   background: var(--border);
-  border-color: var(--border-hover);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .edit-mode-btn.active {
@@ -309,7 +303,7 @@ body.edit-mode .cat-label::before {
 }
 
 body.edit-mode .category {
-  outline: 1px dashed var(--border-hover);
+  outline: 1px dashed color-mix(in srgb, var(--accent) 40%, transparent);
   outline-offset: 6px;
   border-radius: var(--radius-sm);
 }
@@ -437,7 +431,7 @@ body.edit-mode .category {
   font-weight: 600;
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--cat-label);
+  color: color-mix(in srgb, var(--accent) 65%, transparent);
 }
 
 /* ── Links Row / Grid ────────────────────────────────────────── */
@@ -463,7 +457,7 @@ body.edit-mode .category {
 
 .link-card:hover {
   transform: translateY(-1px);
-  border-color: var(--border-hover);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   box-shadow: var(--shadow);
 }
 
@@ -496,7 +490,7 @@ body.edit-mode .category {
   line-height: 1;
   flex-shrink: 0;
   background: var(--bg-card);
-  border: 1px solid var(--border-hover);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
   color: var(--accent);
 }
 
@@ -692,7 +686,7 @@ body.edit-mode .category {
 .target-opt.active {
   border-color: var(--accent);
   color: var(--accent);
-  background: rgba(129,140,248,0.1);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
   font-weight: 600;
 }
 
@@ -787,7 +781,7 @@ body.edit-mode .category {
   justify-content: space-between;
   font-size: 12px;
   font-weight: 600;
-  color: var(--cat-label);
+  color: color-mix(in srgb, var(--accent) 65%, transparent);
   padding-bottom: 4px;
   border-bottom: 1px solid var(--border);
 }
@@ -875,7 +869,7 @@ body.edit-mode .category {
   justify-content: center;
   width: 100%;
   background: transparent;
-  border: 1.5px dashed var(--border-hover);
+  border: 1.5px dashed color-mix(in srgb, var(--accent) 40%, transparent);
   border-radius: var(--radius-card);
   padding: 10px 12px;
   font-size: 20px;
@@ -887,7 +881,7 @@ body.edit-mode .category {
 .add-link-card:hover {
   border-color: var(--accent);
   color: var(--accent);
-  background: rgba(129,140,248,0.06);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
 }
 
 body.edit-mode .add-link-card { display: flex; }
@@ -904,7 +898,7 @@ body.edit-mode .add-cat-section { display: flex; }
 .add-cat-btn {
   padding: 8px 20px;
   border-radius: var(--radius-sm);
-  border: 1.5px dashed var(--border-hover);
+  border: 1.5px dashed color-mix(in srgb, var(--accent) 40%, transparent);
   background: transparent;
   color: var(--text-tertiary);
   font-size: 13px;

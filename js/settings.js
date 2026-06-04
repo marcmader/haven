@@ -1,4 +1,4 @@
-import { applyTheme, updateLogoColors, applyCustomTheme, clearCustomTheme, isEffectivelyLight } from './theme.js';
+import { applyTheme, updateLogoColors, applyCustomTheme, clearCustomTheme } from './theme.js';
 import { detectLang, getGreeting, t } from './i18n.js';
 import { renderCategories } from './links.js';
 import {
@@ -75,7 +75,7 @@ export function initSettings(deps) {
       saveSettings(settings);
       clearCustomTheme();
       applyTheme(theme);
-      updateLogoColors(isEffectivelyLight());
+      updateLogoColors();
       _highlightActive(modal, '[data-theme-opt]', theme, 'data-theme-opt');
     });
   });
@@ -272,7 +272,7 @@ export function initSettings(deps) {
         const lang = detectLang(settings.lang);
         applyTheme(settings.theme);
         if (settings.customTheme) applyCustomTheme(settings.customTheme);
-        updateLogoColors(isEffectivelyLight());
+        updateLogoColors();
         const data = loadLinks();
         renderCategories(data, settings, deps.categoriesContainer);
         if (deps.greetingEl) {

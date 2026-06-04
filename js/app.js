@@ -1,6 +1,6 @@
 import { loadSettings, saveSettings, loadLinks, loadStats, incrementOpenCount } from './storage.js';
 import { detectLang, getGreeting, t } from './i18n.js';
-import { applyTheme, updateLogoColors, applyCustomTheme, watchSystemTheme, isEffectivelyLight } from './theme.js';
+import { applyTheme, updateLogoColors, applyCustomTheme, watchSystemTheme } from './theme.js';
 import { startClock } from './clock.js';
 import { loadQuotes, getDailyQuote, renderQuote } from './quotes.js';
 import { initWeather, startWeatherRefresh } from './weather.js';
@@ -18,11 +18,11 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ── 2. Apply theme ───────────────────────────────────────────
   applyTheme(settings.theme);
   if (settings.customTheme) applyCustomTheme(settings.customTheme);
-  updateLogoColors(isEffectivelyLight());
+  updateLogoColors();
 
   // Keep logo colors in sync when OS theme changes (for auto mode)
-  watchSystemTheme(isLight => {
-    if (settings.theme === 'auto') updateLogoColors(isLight);
+  watchSystemTheme(() => {
+    if (settings.theme === 'auto') updateLogoColors();
   });
 
   // ── 3. Clock ─────────────────────────────────────────────────

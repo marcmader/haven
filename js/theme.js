@@ -19,17 +19,15 @@ export function getCurrentTheme() {
  * Targets stops with id "logo-stop-1" and "logo-stop-2".
  * @param {boolean} isLight
  */
-export function updateLogoColors(isLight) {
+export function updateLogoColors() {
   const stop1 = document.getElementById('logo-stop-1');
   const stop2 = document.getElementById('logo-stop-2');
   if (!stop1 || !stop2) return;
-  if (isLight) {
-    stop1.setAttribute('stop-color', '#7c3aed');
-    stop2.setAttribute('stop-color', '#4f46e5');
-  } else {
-    stop1.setAttribute('stop-color', '#a78bfa');
-    stop2.setAttribute('stop-color', '#818cf8');
-  }
+  const style = getComputedStyle(document.documentElement);
+  const accent  = style.getPropertyValue('--accent').trim();
+  const accent2 = style.getPropertyValue('--accent-2').trim();
+  stop1.setAttribute('stop-color', accent2 || accent);
+  stop2.setAttribute('stop-color', accent);
 }
 
 /**
