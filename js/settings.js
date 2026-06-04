@@ -77,11 +77,23 @@ export function initSettings(deps) {
     btn.addEventListener('click', () => {
       const theme = btn.dataset.themeOpt;
       const settings = loadSettings();
-      settings.theme = theme;
-      settings.customTheme = null;
+
+      if (theme === 'custom') {
+        if (!settings.customTheme) {
+          settings.customTheme = _baseColors(settings.theme === 'custom' ? 'dark' : settings.theme);
+        }
+        settings.theme = 'custom';
+        applyTheme('dark');
+        applyCustomTheme(settings.customTheme);
+        _updatePickerValues(modal, settings.customTheme);
+      } else {
+        settings.theme = theme;
+        settings.customTheme = null;
+        clearCustomTheme();
+        applyTheme(theme);
+        _updatePickerValues(modal, _baseColors(theme));
+      }
       saveSettings(settings);
-      clearCustomTheme();
-      applyTheme(theme);
       updateLogoColors();
       _highlightActive(modal, '[data-theme-opt]', theme, 'data-theme-opt');
     });
@@ -92,10 +104,17 @@ export function initSettings(deps) {
   modal.querySelectorAll('[data-token]').forEach(input => {
     input.addEventListener('input', () => {
       const settings = loadSettings();
+      if (settings.theme !== 'custom') {
+        settings.customTheme = _baseColors(settings.theme);
+        settings.theme = 'custom';
+        applyTheme('dark');
+        _highlightActive(modal, '[data-theme-opt]', 'custom', 'data-theme-opt');
+      }
       if (!settings.customTheme) settings.customTheme = {};
       settings.customTheme[input.dataset.token] = input.value;
       saveSettings(settings);
       applyCustomTheme(settings.customTheme);
+      updateLogoColors();
     });
   });
 
@@ -336,14 +355,9 @@ function _populateModal() {
   const nameInput = modal.querySelector('#setting-name');
   if (nameInput) nameInput.value = settings.userName || '';
 
-  // Fill custom theme color pickers
-  if (settings.customTheme) {
-    modal.querySelectorAll('[data-token]').forEach(input => {
-      if (settings.customTheme[input.dataset.token]) {
-        input.value = settings.customTheme[input.dataset.token];
-      }
-    });
-  }
+  // Fill color pickers with current effective values
+  const effectiveColors = settings.customTheme ?? _baseColors(settings.theme);
+  _updatePickerValues(modal, effectiveColors);
 
   _renderManageLinks(modal, data, settings, {});
   _populateCategorySelect(modal, data);
