@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const lang     = detectLang(settings.lang);
 
   // ── 2. Apply theme ───────────────────────────────────────────
-  applyTheme(settings.theme);
+  applyTheme(settings.theme === 'custom' ? 'dark' : settings.theme);
   if (settings.customTheme) applyCustomTheme(settings.customTheme);
   updateLogoColors();
 
