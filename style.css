@@ -319,6 +319,61 @@ body.edit-mode .category {
   padding: 24px 48px 20px;
 }
 
+.hero-section--expanded {
+  justify-content: flex-start;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Quick Notes Panel ───────────────────────────────────────── */
+.quick-notes-panel {
+  flex: 1;
+  min-width: 0;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-card);
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.quick-notes-title {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.quick-notes-textarea {
+  flex: 1;
+  min-height: 72px;
+  resize: none;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-primary);
+  font-size: 13px;
+  line-height: 1.6;
+  padding: 8px 10px;
+  font-family: var(--font);
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.quick-notes-textarea:focus {
+  border-color: var(--accent);
+}
+
+.quick-notes-hint {
+  font-size: 11px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+}
+
 /* ── Categories Content Area ─────────────────────────────────── */
 .content {
   max-width: 1400px;
@@ -713,6 +768,24 @@ body.edit-mode .category {
   padding: 2px;
   cursor: pointer;
   background: var(--bg-card);
+}
+
+/* ── Toggle Row ─────────────────────────────────────────────── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.toggle-row input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  flex-shrink: 0;
 }
 
 /* ── Modal Inputs ────────────────────────────────────────────── */
