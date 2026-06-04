@@ -8,8 +8,10 @@ A personal browser start page with categorized links, live weather, a ticking cl
 
 ## Features
 
-- **Categorized links** — organize bookmarks into named categories, displayed in a 6-column card grid with favicons; full add/edit/delete support
-- **Clock & weather** — live clock with localized date, current conditions + 3-day forecast via Open-Meteo (no API key required)
+- **Categorized links** — organize bookmarks into named categories, displayed in a 6-column card grid; full add/edit/delete/reorder support
+- **Drag & drop** — activate edit mode (✎) to reorder categories and link cards freely
+- **Inline editing** — in edit mode, add new links and categories directly on the main page without opening the settings modal
+- **Clock & weather** — sticky hero card with live clock, current conditions + 3-day forecast via Open-Meteo (no API key required)
 - **Quote of the day** — daily motivational quote from a curated set of 51 quotes, displayed in the topbar
 - **Personalized greeting** — time-based greeting (morning/afternoon/evening/night) with optional name, centered in the topbar
 - **Google search** — search field in the topbar, opens results in a new tab
@@ -17,6 +19,7 @@ A personal browser start page with categorized links, live weather, a ticking cl
 - **Dark / light / auto theme** — follows the OS setting by default, overridable in settings
 - **Custom theme** — pick your own background, topbar, accent, and text colors
 - **Multilingual** — DE, EN, FR, ES; auto-detected from browser language
+- **Help** — built-in help modal (?) in all four supported languages
 - **Export / import** — full JSON backup and restore of all data
 - **localStorage only** — no server, no account, no tracking
 
@@ -37,7 +40,7 @@ A personal browser start page with categorized links, live weather, a ticking cl
 | Data | `localStorage` |
 | Weather | [Open-Meteo API](https://open-meteo.com/) (free, no key) |
 | Geocoding | [Nominatim](https://nominatim.org/) (OpenStreetMap) |
-| Icons | Google Favicon Service + [Simple Icons](https://simpleicons.org/) CDN |
+| Icons | [Simple Icons](https://simpleicons.org/) CDN |
 | Hosting | GitHub Pages |
 | Build | None |
 
@@ -47,8 +50,8 @@ A personal browser start page with categorized links, live weather, a ticking cl
 
 ```
 haven/
-├── index.html          # Shell — topbar, hero card, modal
-├── style.css           # Design system — all CSS custom properties + components
+├── index.html          # Shell — topbar, sticky hero, categories, modals
+├── style.css           # Design system — CSS custom properties + all components
 ├── quotes.json         # 51 curated motivational quotes
 └── js/
     ├── app.js          # Entry point — wires all modules
@@ -58,8 +61,9 @@ haven/
     ├── clock.js        # Live clock with i18n date
     ├── weather.js      # Open-Meteo + Nominatim + WMO emoji mapping
     ├── quotes.js       # Daily quote selection + render
-    ├── links.js        # Category + link card rendering, icon fallback chain
-    └── settings.js     # Settings modal interactions
+    ├── links.js        # Category + link card rendering, drag & drop, icon fallback
+    ├── settings.js     # Settings modal (tabbed) interactions
+    └── help.js         # Help content in DE/EN/FR/ES + render
 ```
 
 ---
@@ -79,8 +83,9 @@ All data lives in `localStorage` under these keys:
 
 ## Settings
 
-Open the ⚙ button in the top-right corner to access:
+Open the ⚙ button in the top-right corner. The modal is split into three tabs:
 
+**General**
 | Setting | Options |
 |---|---|
 | Language | 🇩🇪 Deutsch · 🇬🇧 English · 🇫🇷 Français · 🇪🇸 Español |
@@ -88,11 +93,32 @@ Open the ⚙ button in the top-right corner to access:
 | Custom theme | Background · Topbar · Accent · Text color pickers |
 | Name | Used in the topbar greeting |
 | Link behavior | New tab (`_blank`) or same window (`_self`) |
-| Manage links | Edit or delete individual links; delete entire categories |
+
+**Links**
+| Action | Description |
+|---|---|
+| Manage | Edit or delete individual links; delete entire categories |
 | Add category | Name a new category |
 | Add link | URL, name, description, icon slug (optional), target category |
+
+**Data**
+| Action | Description |
+|---|---|
 | Export | Downloads `haven-backup-YYYY-MM-DD.json` |
 | Import | Restores from a previously exported JSON file |
+
+---
+
+## Edit Mode
+
+Click the ✎ button in the topbar to activate edit mode. While active:
+
+- A **+** card appears at the end of each category row — click it to open the settings modal pre-filled with that category
+- A **+ Kategorie** button appears below all categories for inline category creation
+- Categories can be reordered by dragging the category label (⠿)
+- Link cards can be dragged within and between categories
+
+All changes are saved to localStorage immediately.
 
 ---
 
@@ -144,20 +170,19 @@ To deploy your own fork:
 - No API key required, free to use
 - Usage policy: one request per weather refresh (every 30 min)
 
-### Icon resolution (fallback chain)
+### Icon resolution
 
 For each link, icons are resolved in this order:
 
-1. **Google Favicon Service** — `https://www.google.com/s2/favicons?domain=<hostname>&sz=64` — fetches the actual site favicon
-2. **Simple Icons CDN** — `https://cdn.simpleicons.org/<slug>/<accent-color>` — brand SVG in the current accent color; auto-detected from the domain name, or set manually via the *Icon Slug* field in the add-link form (full catalogue at [simpleicons.org](https://simpleicons.org))
-3. **Letter avatar** — colored square with the first letter of the link name; used for IP addresses or any link where neither favicon nor Simple Icon is available
+1. **Simple Icons CDN** — `https://cdn.simpleicons.org/<slug>/<accent-color>` — brand SVG in the current accent color; auto-detected from the domain name, or set manually via the *Icon Slug* field (full catalogue at [simpleicons.org](https://simpleicons.org))
+2. **Letter avatar** — themed square with the first letter of the link name; used for IP addresses or any service not found in Simple Icons
 
 ---
 
 ## Privacy
 
 - All personal data (links, settings, name) is stored exclusively in your browser's `localStorage`
-- No data is sent to any server beyond the weather and favicon API calls
+- No data is sent to any server beyond the weather and geocoding API calls
 - Weather uses your geolocation (requested by the browser, only used for the API call)
 - Geolocation coordinates are not stored
 

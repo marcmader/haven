@@ -6,8 +6,8 @@ const HELP_CONTENT = {
         heading: 'Links & Kategorien',
         items: [
           { term: 'Link öffnen',            desc: 'Klick auf eine Kachel öffnet den Link. Das Verhalten (neues Tab oder gleiches Fenster) ist in den Einstellungen konfigurierbar.' },
-          { term: 'Kategorie hinzufügen',   desc: 'Einstellungen (⚙) → Tab „Links" → Kategorie hinzufügen.' },
-          { term: 'Link hinzufügen',        desc: 'Einstellungen → Tab „Links" → Neuen Link hinzufügen. Felder: URL, Name, Beschreibung (optional), Icon Slug (optional), Kategorie.' },
+          { term: 'Kategorie hinzufügen',   desc: 'Im Edit-Modus (✎) direkt über den „+ Kategorie"-Button auf der Hauptseite, oder über Einstellungen (⚙) → Tab „Links" → Kategorie hinzufügen.' },
+          { term: 'Link hinzufügen',        desc: 'Im Edit-Modus (✎) über die „+"-Kachel am Ende einer Kategoriezeile, oder über Einstellungen → Tab „Links" → Neuen Link hinzufügen. Felder: URL, Name, Beschreibung (optional), Icon Slug (optional), Kategorie.' },
           { term: 'Link bearbeiten',        desc: 'Einstellungen → Tab „Links" → in der Linkliste auf „Bearbeiten" klicken. Kategorienwechsel ist dabei möglich.' },
           { term: 'Link / Kategorie löschen', desc: 'Einstellungen → Tab „Links" → Löschen-Button neben dem jeweiligen Eintrag.' },
         ],
@@ -55,8 +55,8 @@ const HELP_CONTENT = {
         heading: 'Links & Categories',
         items: [
           { term: 'Open a link',            desc: 'Click a card to open the link. The behavior (new tab or same window) can be configured in settings.' },
-          { term: 'Add a category',         desc: 'Settings (⚙) → Links tab → Add category.' },
-          { term: 'Add a link',             desc: 'Settings → Links tab → Add new link. Fields: URL, name, description (optional), icon slug (optional), category.' },
+          { term: 'Add a category',         desc: 'In edit mode (✎), use the \"+ Category\" button directly on the main page, or via Settings (⚙) → Links tab → Add category.' },
+          { term: 'Add a link',             desc: 'In edit mode (✎), click the \"+\" card at the end of any category row, or via Settings → Links tab → Add new link. Fields: URL, name, description (optional), icon slug (optional), category.' },
           { term: 'Edit a link',            desc: 'Settings → Links tab → click "Edit" next to the link. You can also move it to a different category.' },
           { term: 'Delete a link / category', desc: 'Settings → Links tab → click the delete button next to the entry.' },
         ],
@@ -104,8 +104,8 @@ const HELP_CONTENT = {
         heading: 'Liens & Catégories',
         items: [
           { term: 'Ouvrir un lien',         desc: 'Cliquez sur une carte pour ouvrir le lien. Le comportement (nouvel onglet ou même fenêtre) est configurable dans les paramètres.' },
-          { term: 'Ajouter une catégorie',  desc: 'Paramètres (⚙) → onglet „Liens" → Ajouter une catégorie.' },
-          { term: 'Ajouter un lien',        desc: 'Paramètres → onglet „Liens" → Ajouter un nouveau lien. Champs : URL, nom, description (optionnel), slug d\'icône (optionnel), catégorie.' },
+          { term: 'Ajouter une catégorie',  desc: 'En mode édition (✎), utilisez le bouton „+ Catégorie" directement sur la page principale, ou via Paramètres (⚙) → onglet „Liens" → Ajouter une catégorie.' },
+          { term: 'Ajouter un lien',        desc: 'En mode édition (✎), cliquez sur la carte „+" à la fin d\'une rangée de catégorie, ou via Paramètres → onglet „Liens" → Ajouter un nouveau lien. Champs : URL, nom, description (optionnel), slug d\'icône (optionnel), catégorie.' },
           { term: 'Modifier un lien',       desc: 'Paramètres → onglet „Liens" → cliquer sur „Modifier". Le changement de catégorie est possible.' },
           { term: 'Supprimer',              desc: 'Paramètres → onglet „Liens" → bouton Supprimer à côté de l\'entrée.' },
         ],
@@ -153,8 +153,8 @@ const HELP_CONTENT = {
         heading: 'Enlaces & Categorías',
         items: [
           { term: 'Abrir un enlace',        desc: 'Haz clic en una tarjeta para abrir el enlace. El comportamiento (nueva pestaña o misma ventana) es configurable en ajustes.' },
-          { term: 'Añadir categoría',       desc: 'Ajustes (⚙) → pestaña „Enlaces" → Añadir categoría.' },
-          { term: 'Añadir enlace',          desc: 'Ajustes → pestaña „Enlaces" → Añadir nuevo enlace. Campos: URL, nombre, descripción (opcional), slug de icono (opcional), categoría.' },
+          { term: 'Añadir categoría',       desc: 'En modo edición (✎), usa el botón „+ Categoría" directamente en la página principal, o mediante Ajustes (⚙) → pestaña „Enlaces" → Añadir categoría.' },
+          { term: 'Añadir enlace',          desc: 'En modo edición (✎), haz clic en la tarjeta „+" al final de una fila de categoría, o mediante Ajustes → pestaña „Enlaces" → Añadir nuevo enlace. Campos: URL, nombre, descripción (opcional), slug de icono (opcional), categoría.' },
           { term: 'Editar enlace',          desc: 'Ajustes → pestaña „Enlaces" → clic en „Editar". También puedes cambiar la categoría.' },
           { term: 'Eliminar',               desc: 'Ajustes → pestaña „Enlaces" → botón eliminar junto a la entrada.' },
         ],
