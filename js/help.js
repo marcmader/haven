@@ -31,7 +31,7 @@ const HELP_CONTENT = {
       {
         heading: 'Design & Einstellungen',
         items: [
-          { term: 'Design',                 desc: 'Einstellungen → Allgemein → Dark, Light oder Auto (folgt der Systemeinstellung). Unter „Custom Theme" lassen sich alle Farben einzeln anpassen.' },
+          { term: 'Design',                 desc: 'Einstellungen → Allgemein → Dark, Light, Auto (folgt dem System) oder Custom. Im Custom-Modus sind 7 Farben frei einstellbar: Hintergrund, Topbar, Akzentfarbe, Akzent 2, Text, Sekundärtext, Tertiärtext. Wechsel zu Dark/Light/Auto stellt die jeweiligen Defaults wieder her.' },
           { term: 'Sprache',                desc: 'Einstellungen → Allgemein → Sprache. Die Begrüßung und Datumsanzeige passen sich automatisch an.' },
           { term: 'Begrüßung',              desc: 'Einstellungen → Allgemein → Name eintragen für eine personalisierte Begrüßung in der Topbar.' },
           { term: 'Suche',                  desc: 'Das Suchfeld in der Topbar öffnet eine Google-Suche in einem neuen Tab.' },
@@ -80,7 +80,7 @@ const HELP_CONTENT = {
       {
         heading: 'Design & Settings',
         items: [
-          { term: 'Theme',                  desc: 'Settings → General → Dark, Light or Auto (follows system setting). Under Custom Theme, all colors can be individually adjusted.' },
+          { term: 'Theme',                  desc: 'Settings → General → Dark, Light, Auto (follows system), or Custom. In Custom mode, 7 colors are freely adjustable: Background, Topbar, Accent, Accent 2, Text, Secondary text, Tertiary text. Switching to Dark/Light/Auto restores that theme\'s defaults.' },
           { term: 'Language',               desc: 'Settings → General → Language. The greeting and date display adapt automatically.' },
           { term: 'Greeting',               desc: 'Settings → General → enter your name for a personalized greeting in the topbar.' },
           { term: 'Search',                 desc: 'The search field in the topbar opens a Google search in a new tab.' },
@@ -129,7 +129,7 @@ const HELP_CONTENT = {
       {
         heading: 'Design & Paramètres',
         items: [
-          { term: 'Thème',                  desc: 'Paramètres → Général → Sombre, Clair ou Auto (suit le système). Sous „Custom Theme", toutes les couleurs sont personnalisables.' },
+          { term: 'Thème',                  desc: 'Paramètres → Général → Sombre, Clair, Auto (suit le système) ou Custom. En mode Custom, 7 couleurs sont configurables : Arrière-plan, Barre supérieure, Couleur d\'accentuation, Accentuation 2, Texte, Texte secondaire, Texte tertiaire. Passer à Sombre/Clair/Auto restaure les valeurs par défaut du thème.' },
           { term: 'Langue',                 desc: 'Paramètres → Général → Langue. Le message d\'accueil et la date s\'adaptent automatiquement.' },
           { term: 'Message d\'accueil',     desc: 'Paramètres → Général → entrez votre nom pour un message d\'accueil personnalisé dans la barre supérieure.' },
           { term: 'Recherche',              desc: 'Le champ de recherche dans la barre supérieure ouvre une recherche Google dans un nouvel onglet.' },
@@ -178,7 +178,7 @@ const HELP_CONTENT = {
       {
         heading: 'Diseño & Ajustes',
         items: [
-          { term: 'Tema',                   desc: 'Ajustes → General → Oscuro, Claro o Auto (sigue el sistema). En „Custom Theme" se pueden personalizar todos los colores.' },
+          { term: 'Tema',                   desc: 'Ajustes → General → Oscuro, Claro, Auto (sigue el sistema) o Custom. En modo Custom se pueden configurar 7 colores: Fondo, Barra superior, Color de acento, Acento 2, Texto, Texto secundario, Texto terciario. Cambiar a Oscuro/Claro/Auto restaura los valores predeterminados de ese tema.' },
           { term: 'Idioma',                 desc: 'Ajustes → General → Idioma. El saludo y la fecha se adaptan automáticamente.' },
           { term: 'Saludo',                 desc: 'Ajustes → General → introduce tu nombre para un saludo personalizado en la barra superior.' },
           { term: 'Búsqueda',               desc: 'El campo de búsqueda en la barra superior abre una búsqueda de Google en una nueva pestaña.' },

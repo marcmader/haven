@@ -16,8 +16,7 @@ A personal browser start page with categorized links, live weather, a ticking cl
 - **Personalized greeting** — time-based greeting (morning/afternoon/evening/night) with optional name, centered in the topbar
 - **Google search** — search field in the topbar, opens results in a new tab
 - **Link statistics** — live count of total links, categories, and opens today
-- **Dark / light / auto theme** — follows the OS setting by default, overridable in settings
-- **Custom theme** — pick your own background, topbar, accent, and text colors
+- **Dark / light / auto / custom theme** — follows the OS setting by default; Custom mode lets you freely configure 7 individual colors; switching back to Dark/Light/Auto restores that theme's defaults
 - **Multilingual** — DE, EN, FR, ES; auto-detected from browser language
 - **Help** — built-in help modal (?) in all four supported languages
 - **Export / import** — full JSON backup and restore of all data
@@ -89,8 +88,8 @@ Open the ⚙ button in the top-right corner. The modal is split into three tabs:
 | Setting | Options |
 |---|---|
 | Language | 🇩🇪 Deutsch · 🇬🇧 English · 🇫🇷 Français · 🇪🇸 Español |
-| Theme | Auto (OS) · Dark · Light |
-| Custom theme | Background · Topbar · Accent · Text color pickers |
+| Theme | Auto (OS) · Dark · Light · **Custom** |
+| Custom theme | 7 color pickers: Background · Topbar · Accent · Accent 2 · Text · Secondary text · Tertiary text; switching to Dark/Light/Auto restores defaults |
 | Name | Used in the topbar greeting |
 | Link behavior | New tab (`_blank`) or same window (`_self`) |
 
