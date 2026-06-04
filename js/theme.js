@@ -43,6 +43,7 @@ export function applyCustomTheme(tokens) {
     bgCard:        '--bg-card',
     bgTopbar:      '--bg-topbar',
     accent:        '--accent',
+    accent2:       '--accent-2',
     textPrimary:   '--text-primary',
     textSecondary: '--text-secondary',
     textTertiary:  '--text-tertiary',
@@ -57,7 +58,7 @@ export function applyCustomTheme(tokens) {
  */
 export function clearCustomTheme() {
   const root = document.documentElement;
-  ['--bg','--bg-card','--bg-topbar','--accent','--text-primary','--text-secondary','--text-tertiary']
+  ['--bg','--bg-card','--bg-topbar','--accent','--accent-2','--text-primary','--text-secondary','--text-tertiary']
     .forEach(v => root.style.removeProperty(v));
 }
 
