@@ -6,6 +6,13 @@ import {
   loadStats, exportJSON, importJSON, uuid,
 } from './storage.js';
 
+const _THEME_DEFAULTS = {
+  dark:  { bg: '#0a0a14', bgTopbar: '#0a0a14', accent: '#818cf8', accent2: '#a78bfa',
+           textPrimary: '#e8e8f4', textSecondary: '#a0a0bc', textTertiary: '#60607a' },
+  light: { bg: '#f0eff5', bgTopbar: '#f0eff5', accent: '#4f46e5', accent2: '#7c3aed',
+           textPrimary: '#12112a', textSecondary: '#4a4a6a', textTertiary: '#8080a0' },
+};
+
 /**
  * Initialize all settings modal interactions.
  * @param {{
@@ -472,4 +479,19 @@ function _exitEditMode(modal) {
   if (slugInput) slugInput.value = '';
   if (submitBtn) submitBtn.textContent = 'Hinzufügen';
   if (cancelBtn) cancelBtn.style.display = 'none';
+}
+
+function _baseColors(theme) {
+  if (theme === 'auto') {
+    const isLight = window.matchMedia('(prefers-color-scheme: light)').matches;
+    return { ...(isLight ? _THEME_DEFAULTS.light : _THEME_DEFAULTS.dark) };
+  }
+  return { ...(_THEME_DEFAULTS[theme] ?? _THEME_DEFAULTS.dark) };
+}
+
+function _updatePickerValues(modal, colors) {
+  modal.querySelectorAll('[data-token]').forEach(input => {
+    const v = colors[input.dataset.token];
+    if (v) input.value = v;
+  });
 }
