@@ -6,6 +6,7 @@ import { loadQuotes, getDailyQuote, renderQuote } from './quotes.js';
 import { initWeather, startWeatherRefresh } from './weather.js';
 import { renderCategories } from './links.js';
 import { initSettings } from './settings.js';
+import { initNotes } from './notes.js';
 import { renderHelp } from './help.js';
 
 document.addEventListener('DOMContentLoaded', async () => {
@@ -68,19 +69,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     _clockId: clockId,
   });
 
-  // ── 7. Links ──────────────────────────────────────────────────
+  // ── 7. Quick Notes ───────────────────────────────────────────
+  initNotes();
+
+  // ── 8. Links ─────────────────────────────────────────────────
   renderCategories(data, settings, contentEl, {
     onAddLink: (catId) => settingsCtrl.openToAddLink(catId),
   });
 
-  // ── 8. Greeting ──────────────────────────────────────────────
+  // ── 9. Greeting ──────────────────────────────────────────────
   _renderGreeting(greetingEl, lang, settings.userName);
 
-  // ── 9. Stats ──────────────────────────────────────────────────
+  // ── 10. Stats ─────────────────────────────────────────────────
   const stats = incrementOpenCount();
   _renderStats(data, stats, lang);
 
-  // ── 10. Search ────────────────────────────────────────────────
+  // ── 11. Search ────────────────────────────────────────────────
   document.getElementById('search-form')?.addEventListener('submit', e => {
     e.preventDefault();
     const query = document.getElementById('search-input')?.value.trim();
@@ -97,14 +101,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   const modalTitle = document.getElementById('modal-title');
   if (modalTitle) modalTitle.textContent = t(lang, 'settingsTitle');
 
-  // ── 11. Edit mode toggle ──────────────────────────────────────────────
+  // ── 12. Edit mode toggle ──────────────────────────────────────────────
   const editBtn = document.getElementById('edit-mode-btn');
   editBtn?.addEventListener('click', () => {
     const active = document.body.classList.toggle('edit-mode');
     editBtn.classList.toggle('active', active);
   });
 
-  // ── 12. Help modal ────────────────────────────────────────────────────
+  // ── 13. Help modal ────────────────────────────────────────────────────
   const helpOverlay = document.getElementById('help-modal');
   renderHelp(lang);
 
