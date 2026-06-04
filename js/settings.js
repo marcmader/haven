@@ -108,9 +108,9 @@ export function initSettings(deps) {
         settings.customTheme = _baseColors(settings.theme);
         settings.theme = 'custom';
         applyTheme('dark');
+        _updatePickerValues(modal, settings.customTheme);
         _highlightActive(modal, '[data-theme-opt]', 'custom', 'data-theme-opt');
       }
-      if (!settings.customTheme) settings.customTheme = {};
       settings.customTheme[input.dataset.token] = input.value;
       saveSettings(settings);
       applyCustomTheme(settings.customTheme);
@@ -506,6 +506,6 @@ function _baseColors(theme) {
 function _updatePickerValues(modal, colors) {
   modal.querySelectorAll('[data-token]').forEach(input => {
     const v = colors[input.dataset.token];
-    if (v) input.value = v;
+    if (v !== undefined) input.value = v;
   });
 }
