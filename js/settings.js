@@ -1,4 +1,5 @@
 import { applyTheme, updateLogoColors, applyCustomTheme, clearCustomTheme } from './theme.js';
+import { initNotes } from './notes.js';
 import { detectLang, getGreeting, t } from './i18n.js';
 import { renderCategories } from './links.js';
 import {
@@ -129,6 +130,15 @@ export function initSettings(deps) {
     if (deps.greetingEl) {
       deps.greetingEl.innerHTML = _greetingHTML(lang, settings.userName);
     }
+  });
+
+  // ── Quick Notes toggle ────────────────────────────────────────────────────
+
+  modal.querySelector('#setting-show-notes')?.addEventListener('change', e => {
+    const settings = loadSettings();
+    settings.showQuickNotes = e.target.checked;
+    saveSettings(settings);
+    initNotes();
   });
 
   // ── Link target toggle ────────────────────────────────────────────────────
@@ -354,6 +364,8 @@ function _populateModal() {
   // Fill name input
   const nameInput = modal.querySelector('#setting-name');
   if (nameInput) nameInput.value = settings.userName || '';
+  const notesToggle = modal.querySelector('#setting-show-notes');
+  if (notesToggle) notesToggle.checked = settings.showQuickNotes ?? false;
 
   // Fill color pickers with current effective values
   const effectiveColors = settings.customTheme ?? _baseColors(settings.theme);
