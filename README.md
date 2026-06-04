@@ -1,6 +1,6 @@
 # Haven
 
-A personal browser start page with categorized links, live weather, a ticking clock, daily quotes, and a full settings modal — all in vanilla HTML/CSS/JS with no build step.
+A personal browser start page with categorized links, live weather, a ticking clock, daily quotes, and quick notes — all in vanilla HTML/CSS/JS with no build step. Everything is stored exclusively in your browser's `localStorage` — no account, no server, no tracking, nothing leaves your machine.
 
 **Live:** https://marcmader.github.io/haven/
 
@@ -11,6 +11,7 @@ A personal browser start page with categorized links, live weather, a ticking cl
 - **Categorized links** — organize bookmarks into named categories, displayed in a 6-column card grid; full add/edit/delete/reorder support
 - **Drag & drop** — activate edit mode (✎) to reorder categories and link cards freely
 - **Inline editing** — in edit mode, add new links and categories directly on the main page without opening the settings modal
+- **Quick Notes** — sticky notepad next to the hero card; toggleable via Settings → General; autosaves on every keystroke
 - **Clock & weather** — sticky hero card with live clock, current conditions + 3-day forecast via Open-Meteo (no API key required)
 - **Quote of the day** — daily motivational quote from a curated set of 51 quotes, displayed in the topbar
 - **Personalized greeting** — time-based greeting (morning/afternoon/evening/night) with optional name, centered in the topbar
@@ -92,6 +93,7 @@ Open the ⚙ button in the top-right corner. The modal is split into three tabs:
 | Custom theme | 7 color pickers: Background · Topbar · Accent · Accent 2 · Text · Secondary text · Tertiary text; switching to Dark/Light/Auto restores defaults |
 | Name | Used in the topbar greeting |
 | Link behavior | New tab (`_blank`) or same window (`_self`) |
+| Quick Notes | Show/hide the notes panel next to the hero card |
 
 **Links**
 | Action | Description |
