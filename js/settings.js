@@ -1,5 +1,6 @@
 import { applyTheme, updateLogoColors, applyCustomTheme, clearCustomTheme } from './theme.js';
 import { initNotes } from './notes.js';
+import { detectLocation } from './weather.js';
 import { detectLang, getGreeting, t } from './i18n.js';
 import { renderCategories } from './links.js';
 import {
@@ -139,6 +140,25 @@ export function initSettings(deps) {
     settings.showQuickNotes = e.target.checked;
     saveSettings(settings);
     initNotes();
+  });
+
+  // ── Detect location button ────────────────────────────────────────────────
+
+  modal.querySelector('#detect-location-btn')?.addEventListener('click', async () => {
+    const btn = modal.querySelector('#detect-location-btn');
+    if (btn) { btn.disabled = true; btn.textContent = '…'; }
+    const weatherEls = {
+      iconEl:     document.getElementById('w-icon'),
+      tempEl:     document.getElementById('w-temp'),
+      cityEl:     document.getElementById('w-city'),
+      descEl:     document.getElementById('w-desc'),
+      forecastEl: document.getElementById('fc-pills'),
+    };
+    const lang = detectLang(loadSettings().lang);
+    const city = await detectLocation(weatherEls, lang);
+    const cityEl = modal.querySelector('#setting-city-name');
+    if (cityEl) cityEl.textContent = city ?? '—';
+    if (btn) { btn.disabled = false; btn.textContent = 'Neu bestimmen'; }
   });
 
   // ── Link target toggle ────────────────────────────────────────────────────
@@ -366,6 +386,9 @@ function _populateModal() {
   if (nameInput) nameInput.value = settings.userName || '';
   const notesToggle = modal.querySelector('#setting-show-notes');
   if (notesToggle) notesToggle.checked = settings.showQuickNotes ?? false;
+
+  const cityEl = modal.querySelector('#setting-city-name');
+  if (cityEl) cityEl.textContent = settings.location?.city ?? '—';
 
   // Fill color pickers with current effective values
   const effectiveColors = settings.customTheme ?? _baseColors(settings.theme);

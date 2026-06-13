@@ -1,4 +1,5 @@
 import { LANGS } from './i18n.js';
+import { loadSettings, saveSettings } from './storage.js';
 
 // WMO Weather Interpretation Codes → emoji + description
 const WMO = {
@@ -141,37 +142,81 @@ function renderForecast(daily, forecastEl, lang) {
   }
 }
 
+/** Geolocation + reverse geocode → { lat, lon, city } */
+async function _geolocate() {
+  const pos = await getPosition();
+  const { latitude: lat, longitude: lon } = pos.coords;
+  const city = await reverseGeocode(lat, lon);
+  return { lat, lon, city };
+}
+
+/** Show loading placeholder in weather elements */
+function _showLoading(elements) {
+  elements.tempEl.textContent = '…';
+  elements.cityEl.textContent = '';
+  elements.descEl.textContent = '';
+}
+
+/** Show error state in weather elements */
+function _showError(elements) {
+  elements.iconEl.textContent = '📍';
+  elements.tempEl.textContent = '--';
+  elements.cityEl.textContent = 'Location unavailable';
+  elements.descEl.textContent = '';
+}
+
 /**
- * Initialize weather: fetch once on load, then schedule 30-min refresh.
+ * Initialize weather on startup.
+ * Uses stored location if available; otherwise requests geolocation once and saves it.
  * @param {{ iconEl, tempEl, cityEl, descEl, forecastEl: HTMLElement }} elements
  * @param {string} lang
  */
 export async function initWeather(elements, lang) {
-  // Show loading state
-  elements.tempEl.textContent = '…';
-  elements.cityEl.textContent = '';
-  elements.descEl.textContent = '';
-
+  _showLoading(elements);
   try {
-    const pos = await getPosition();
-    const { latitude: lat, longitude: lon } = pos.coords;
-    const [city, weatherData] = await Promise.all([
-      reverseGeocode(lat, lon),
-      fetchWeather(lat, lon),
-    ]);
-    renderWeather(weatherData, city, elements, lang);
+    const settings = loadSettings();
+    let loc = settings.location;
+    if (!loc) {
+      loc = await _geolocate();
+      const fresh = loadSettings();
+      fresh.location = loc;
+      saveSettings(fresh);
+    }
+    const weatherData = await fetchWeather(loc.lat, loc.lon);
+    renderWeather(weatherData, loc.city, elements, lang);
   } catch (err) {
-    elements.iconEl.textContent = '📍';
-    elements.tempEl.textContent = '--';
-    elements.cityEl.textContent = 'Location unavailable';
-    elements.descEl.textContent = '';
+    _showError(elements);
     console.warn('Haven weather error:', err.message);
   }
 }
 
 /**
+ * Force fresh geolocation, persist to settings, re-render weather.
+ * Called by the "Neu bestimmen" button in settings.
+ * @param {{ iconEl, tempEl, cityEl, descEl, forecastEl: HTMLElement }} elements
+ * @param {string} lang
+ * @returns {Promise<string|null>} city name on success, null on failure
+ */
+export async function detectLocation(elements, lang) {
+  _showLoading(elements);
+  try {
+    const loc = await _geolocate();
+    const settings = loadSettings();
+    settings.location = loc;
+    saveSettings(settings);
+    const weatherData = await fetchWeather(loc.lat, loc.lon);
+    renderWeather(weatherData, loc.city, elements, lang);
+    return loc.city;
+  } catch (err) {
+    _showError(elements);
+    console.warn('Haven location error:', err.message);
+    return null;
+  }
+}
+
+/**
  * Start the 30-minute weather refresh interval.
- * Returns intervalId for cleanup.
+ * Uses stored location — never re-requests geolocation.
  * @param {{ iconEl, tempEl, cityEl, descEl, forecastEl: HTMLElement }} elements
  * @param {string} lang
  * @returns {number}

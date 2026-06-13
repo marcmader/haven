@@ -36,6 +36,7 @@ const SETTINGS_DEFAULTS = {
   linkTarget:     '_blank',
   customTheme:    null,
   showQuickNotes: false,
+  location:       null,   // { lat, lon, city } — null triggers first-time geolocation
 };
 
 /** @returns {{ theme: string, lang: string|null, userName: string, linkTarget: string, customTheme: object|null }} */

@@ -770,6 +770,35 @@ body.edit-mode .category {
   background: var(--bg-card);
 }
 
+/* ── Location Row ───────────────────────────────────────────── */
+.location-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.location-city {
+  font-size: 13px;
+  color: var(--text-primary);
+  flex: 1;
+}
+
+.detect-btn {
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  font-size: 12px;
+  transition: border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.detect-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 /* ── Toggle Row ─────────────────────────────────────────────── */
 .toggle-row {
   display: flex;
