@@ -21,6 +21,7 @@ A personal browser start page with categorized links, live weather, a ticking cl
 - **Multilingual** — DE, EN, FR, ES; auto-detected from browser language
 - **Help** — built-in help modal (?) in all four supported languages
 - **Export / import** — full JSON backup and restore of all data
+- **Persistent location** — geolocation is requested once and stored; no repeated browser prompts; update via Settings → General → "Re-detect"
 - **localStorage only** — no server, no account, no tracking
 
 ---
@@ -94,6 +95,7 @@ Open the ⚙ button in the top-right corner. The modal is split into three tabs:
 | Name | Used in the topbar greeting |
 | Link behavior | New tab (`_blank`) or same window (`_self`) |
 | Quick Notes | Show/hide the notes panel next to the hero card |
+| Location | Shows stored city name; "Re-detect" button triggers fresh geolocation |
 
 **Links**
 | Action | Description |
